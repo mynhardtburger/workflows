@@ -1,0 +1,60 @@
+# Document Review Workflow
+
+Systematic documentation review through these phases:
+
+1. **Scan** (`/scan`) — Discover and catalog all documentation files
+2. **Review** (`/review`) — Deep quality analysis against 7 dimensions
+3. **Verify** (`/verify`) — *(Optional)* Cross-reference docs against source code
+4. **Test** (`/test`) — *(Optional)* Execute documented instructions and verify output
+5. **Report** (`/report`) — Generate prioritized findings summary
+6. **Fix** (`/fix`) — *(Optional)* Generate inline fix suggestions
+7. **Speedrun** (`/speedrun`) — Run scan → review → report in one shot
+
+The workflow controller lives at `.claude/skills/controller/SKILL.md`.
+It defines how to execute phases, recommend next steps, and handle transitions.
+Phase skills are at `.claude/skills/{name}/SKILL.md`.
+Artifacts go in `artifacts/document-review/`.
+
+## Quality Dimensions
+
+1. **Accuracy** — Do docs match reality?
+2. **Completeness** — Are there gaps or missing docs?
+3. **Consistency** — Do docs agree with each other? Is terminology uniform?
+4. **Clarity** — Is language clear for the target audience?
+5. **Currency** — Dead links, deprecated references, old versions?
+6. **Structure** — Logical organization, navigation, headings?
+7. **Examples** — Code samples present and correct?
+
+## Finding Severities
+
+- **Error** — Factually incorrect information that misleads users
+- **Gap** — Missing documentation for existing functionality
+- **Inconsistency** — Contradictions between documents
+- **Stale** — Outdated content, dead links, removed features
+- **Improvement** — Could be clearer, better structured, or more helpful
+
+## Principles
+
+- Show evidence — quote the doc, cite file:line, don't make vague claims
+- Be specific about what's wrong and why it matters
+- Don't nitpick style when content is the real issue
+- Assess audience-appropriateness for each document
+- Flag uncertainty rather than guessing
+
+## Hard Limits
+
+- Do not modify the project's documentation unless the user runs `/fix`
+- Do not make assumptions about intended behavior — flag for verification
+- Read-only access to project code unless explicitly told otherwise
+- When executing documented instructions (`/test`), always revert all
+  environment changes afterward
+- Never execute commands that could be destructive to the host system
+
+## Working With the Project
+
+This workflow gets deployed into different projects. Respect the target project:
+
+- Understand the project's documentation conventions before critiquing
+- Evaluate against the project's own standards, not arbitrary preferences
+- Consider the project's maturity level when assessing completeness
+- When in doubt about intended behavior, check git history and existing code
