@@ -213,16 +213,16 @@ Apply these judgment guidelines to avoid false positives:
     * Changed behavior for an uncommon configuration
     * Documentation improvement that would be helpful but not essential
 
-5b. For each finding, decide whether to suggest specific replacement text:
+5b. For each finding, decide whether to provide a specific fix:
 
-  SUGGEST TEXT when ALL of the following are true:
+  PROVIDE FIX TEXT when ALL of the following are true:
     * You can identify the exact file and location where the update belongs
     * The factual content of the correction is fully determinable from the diff
       (you do not need to guess or assume unstated behavior)
     * The text is short enough to be unambiguous (a sentence, a parameter
       description, a config key entry -- not an entire tutorial section)
 
-  FLAG WITHOUT TEXT when ANY of the following are true:
+  FLAG FOR MANUAL REVIEW when ANY of the following are true:
     * The documentation structure is complex and the correct location is unclear
     * The full behavior requires context beyond what the diff reveals
     * The required update is a substantial new section or page
@@ -271,7 +271,7 @@ NEVER do the following:
 - Flag changelog, release notes, or commit message omissions
 - Produce findings for changes where no documentation exists AND the repo has
   no documentation ecosystem
-- Suggest substantial new documentation sections as "suggested text"
+- Suggest substantial new documentation sections as fix text
 
 ALWAYS do the following:
 - Complete all five phases before producing output
@@ -285,6 +285,7 @@ ALWAYS do the following:
   flagging it as MINOR rather than assuming coverage
 
 ## Examples
+
 EXAMPLE 1 -- Internal refactoring, no doc impact:
 
 Input: PR renames internal helper functions and reorganizes module structure.
@@ -293,8 +294,7 @@ No public API, CLI, or config changes.
 Output:
 ## Documentation Review: PASS
 ### Summary
-This PR refactors internal module organization. All changes are internal with
-no user-facing impact; no documentation updates are required.
+Internal module refactoring with no user-facing impact.
 ### Findings
 No documentation gaps identified.
 
@@ -308,19 +308,16 @@ text in cmd/export.go is updated, but docs/cli-reference.md is not.
 Output:
 ## Documentation Review: FAIL
 ### Summary
-This PR adds a --format flag to the export command. CLI inline help is updated,
-but the CLI reference documentation has not been updated.
+Adds --format flag to the export command. CLI help is updated but the CLI
+reference doc is not.
 ### Findings
 #### 1. CLI reference missing new --format flag
-- **Severity**: MAJOR
-- **Category**: B -- CLI and Command Changes
-- **Blast radius**: BROAD
-- **Code change**: cmd/export.go -- added --format flag with json and csv options
-- **Expected documentation**: docs/cli-reference.md, "export" command section
-- **What is missing**: The --format flag, its accepted values (json, csv), and
-  default behavior (csv) are not documented in the CLI reference.
-- **Suggested text**: Under the `export` command flags table, add:
-  "| --format | Output format. Accepted values: `json`, `csv`. Default: `csv` |"
+**MAJOR** · BROAD
+- **Change**: `cmd/export.go` added --format flag with json and csv options
+- **Gap**: `docs/cli-reference.md` (export section) -- flag not documented
+  with accepted values or default
+- **Fix**: Add to export flags table:
+  `| --format | Output format. Values: json, csv. Default: csv |`
 
 ---
 
@@ -332,16 +329,14 @@ The API docs reference the old default of 20.
 Output:
 ## Documentation Review: FAIL
 ### Summary
-This PR changes the default pagination page size from 20 to 50. The API
-reference still documents the old default.
+Changes default pagination page size from 20 to 50. API reference still
+documents 20.
 ### Findings
 #### 1. API reference states incorrect default page size
-- **Severity**: CRITICAL
-- **Category**: D -- Behavioral Changes to Existing Features
-- **Blast radius**: BROAD
-- **Code change**: internal/api/pagination.go:15 -- DEFAULT_PAGE_SIZE changed
+**CRITICAL** · BROAD
+- **Change**: `internal/api/pagination.go:15` -- DEFAULT_PAGE_SIZE changed
   from 20 to 50
-- **Expected documentation**: docs/api/pagination.md
-- **What is missing**: The default page size is documented as 20; it should be 50.
-- **Suggested text**: In docs/api/pagination.md, line 8, change "Defaults to 20
-  results per page" to "Defaults to 50 results per page".
+- **Gap**: `docs/api/pagination.md` -- default page size documented as 20,
+  now 50
+- **Fix**: Line 8, change "Defaults to 20 results per page" to "Defaults to
+  50 results per page"
