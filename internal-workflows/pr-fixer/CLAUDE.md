@@ -69,21 +69,38 @@ Bot reviews with `Prompt for AI Agents` blocks can be useful as a starting point
 
 Human reviewers are usually more targeted. Fix what they ask for. If you disagree, reply explaining why — don't ignore them.
 
-### Replying on threads
+### Replying on threads — REQUIRED
 
-**When you fix an inline comment, reply on that thread:**
+**Every inline comment MUST get a reply.** Whether you fixed it or skipped it, respond. This is not optional — reviewers need to see that their feedback was acknowledged.
+
+**Step 1: Get the comment IDs from GitHub** (the IDs in `comments.json` may not work for replies):
 
 ```bash
+# List all inline review comments with their IDs
+gh api "repos/{owner}/{repo}/pulls/{number}/comments" \
+  --jq '.[] | {id: .id, author: .user.login, path: .path, body: .body[:80]}'
+```
+
+**Step 2: Reply to each one:**
+
+```bash
+# When you fixed it:
 gh api "repos/{owner}/{repo}/pulls/{number}/comments/{comment_id}/replies" \
   -f body="Fixed — [what you did]"
+
+# When you skipped it:
+gh api "repos/{owner}/{repo}/pulls/{number}/comments/{comment_id}/replies" \
+  -f body="Skipping — [reason]"
 ```
 
-**When you skip a suggestion, reply explaining why:**
+**Step 3: After replying to all inline comments, also reply to any top-level review comments** (these are the summary comments left by reviewers, not inline):
 
 ```bash
-gh api "repos/{owner}/{repo}/pulls/{number}/comments/{comment_id}/replies" \
-  -f body="Skipping — [reason: not a real issue / style preference / code not touched by this PR / etc.]"
+# Reply to top-level PR comments
+gh pr comment {number} --repo {owner/repo} --body "[your response]"
 ```
+
+If replying to a specific review comment fails, fall back to posting a top-level comment that references the file and line.
 
 ## Fixing CI Failures
 
