@@ -66,7 +66,12 @@ Key judgment calls:
 
 ## Ranking
 
-Bug fixes > features > refactors > docs. Fewer blockers first. Smaller first. Drafts last.
+1. Drafts last
+2. Fewer blockers first (clean before blocked)
+3. Priority labels boost (`critical`, `hotfix`, `bug`)
+4. Type: bug fixes > features > refactors > docs
+5. Recently updated first (active PRs over stale ones)
+6. Smaller first
 
 ## Milestone
 
@@ -74,7 +79,40 @@ Find or create **"Review Queue"** milestone (also check for "Merge Queue"). Add 
 
 ## Blocker Comments
 
-Post on PRs with `fail_count > 0` using `<!-- review-queue-bot -->` marker. Skip if unchanged since last comment. Skip drafts and recommend-close PRs.
+Post **after sub-agent evaluation is complete**. Skip drafts, recommend-close PRs, and PRs unchanged since last comment.
+
+Use `<!-- review-queue-bot -->` marker. Delete old comment before posting new one.
+
+**Do NOT use a rigid blocker table.** Write a natural language comment that's actually helpful to the PR author. Use the analysis data and sub-agent verdict to write 2-4 sentences covering:
+
+- What's blocking this PR specifically (not just "CI FAIL" — say which check failed and why if you know)
+- What the author needs to do to unblock it
+- Any context from the review conversation that's relevant
+
+Example of a **good** blocker comment:
+
+```markdown
+### Review Queue — Not Ready to Merge
+
+CI is failing on the `e2e` check — looks like the session cleanup test is timing out after your changes to the runner lifecycle. You also have merge conflicts with main on `components/backend/main.go` (likely from #877 which merged yesterday).
+
+@bobbravo2 also requested changes on the error handling in `get_env()` — they want a fallback value instead of raising.
+
+**To unblock:** rebase onto main, fix the e2e timeout, and address Bob's review comment.
+
+<!-- review-queue-bot -->
+```
+
+Example of a **bad** blocker comment (don't do this):
+
+```markdown
+| Check | Status | Detail |
+|-------|--------|--------|
+| CI | FAIL | --- |
+| Merge conflicts | FAIL | --- |
+```
+
+Note: `review_status = "needs_review"` in `analysis.json` means the sub-agent hasn't evaluated yet — it is NOT a clean pass. Always evaluate before deciding if a PR is clean.
 
 ## Report
 
@@ -82,7 +120,7 @@ Use `templates/review-queue.md`. Sections:
 
 - **Ready for Review** — condensed table, priority ordered
 - **Blocked PRs** — table ordered by last updated (most recent first), limit 50. Each row shows blocker icons (CI, CONFLICT, REVIEW, STALE, OVERLAP) and a short issue snippet (e.g., "CI: e2e failing", "CHANGES_REQUESTED from @bob", "Merge conflicts")
-- **Almost Ready** — PRs with exactly 1 blocker, easiest to unblock
+- **Almost Ready** — PRs close to merge (1 mechanical blocker OR sub-agent verdict of `almost`). Write a short agent-generated blurb per PR: 1-2 sentences of context (what happened in review, what's been addressed), then a "Needs:" line with the one concrete action to unblock
 - **Recommend Closing** — stale/abandoned PRs
 - **Drafts** — WIP PRs
 - **Summary** — counts by bucket + by type

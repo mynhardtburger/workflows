@@ -239,6 +239,37 @@ def main():
     for r in results:
         r["fail_count"] = sum(1 for s in [r["ci_status"], r["conflict_status"], r["review_status"], r["stale_status"], r["overlap_status"]] if s == "FAIL")
 
+        # Build blocker_icons and issue_snippet for the report template
+        icons = []
+        snippets = []
+        if r["ci_status"] == "FAIL":
+            icons.append("CI")
+            snippets.append(r["ci_detail"])
+        if r["conflict_status"] == "FAIL":
+            icons.append("CONFLICT")
+            snippets.append(r["conflict_detail"])
+        if r["review_status"] == "FAIL":
+            icons.append("REVIEW")
+            snippets.append(r["review_detail"])
+        elif r["review_status"] == "needs_review":
+            icons.append("REVIEW?")
+            snippets.append("Needs evaluation")
+        if r["stale_status"] == "FAIL":
+            icons.append("STALE")
+            snippets.append(r["stale_detail"])
+        if r["overlap_status"] == "FAIL":
+            icons.append("OVERLAP")
+            snippets.append(r["overlap_detail"])
+        r["blocker_icons"] = ", ".join(icons) if icons else "\u2014"
+        r["issue_snippet"] = "; ".join(snippets) if snippets else "\u2014"
+        # For "Almost Ready" section — single blocker description
+        if r["fail_count"] == 1 and icons:
+            r["single_blocker"] = icons[0]
+            r["what_needed"] = snippets[0] if snippets else "\u2014"
+        else:
+            r["single_blocker"] = ""
+            r["what_needed"] = ""
+
     for r in results:
         reasons = []
         days = r["days_since_update"]
@@ -252,7 +283,17 @@ def main():
             r["recommend_close"] = True
             r["recommend_close_reason"] = "; ".join(reasons)
 
-    results.sort(key=lambda r: (1 if r["isDraft"] else 0, TYPE_PRIORITY.get(r["pr_type"], 99), r["fail_count"], 0 if r["has_priority"] else 1, r["size_score"]))
+    # Ranking: drafts last, then clean before blocked, then type, then
+    # recently updated first (negative days = more recent ranks higher),
+    # then smaller first, with priority labels boosting within tier
+    results.sort(key=lambda r: (
+        1 if r["isDraft"] else 0,
+        r["fail_count"],
+        0 if r["has_priority"] else 1,
+        TYPE_PRIORITY.get(r["pr_type"], 99),
+        r["days_since_update"] if r["days_since_update"] is not None else 999,
+        r["size_score"],
+    ))
     for i, r in enumerate(results):
         r["rank"] = i + 1
 
