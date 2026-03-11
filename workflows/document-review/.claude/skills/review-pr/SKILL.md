@@ -257,39 +257,9 @@ Apply these judgment guidelines to avoid false positives:
     Note any areas where you could not fully assess coverage due to scale.
 
 ## Output format
-Structure your response as follows. Do not deviate from this format.
 
----
-
-## Documentation Review: [PASS | PASS WITH SUGGESTIONS | FAIL]
-
-### Summary
-[1-3 sentence overview: what this PR does, whether it has user-facing impact,
-and whether documentation updates are sufficient.]
-
-### Findings
-
-[If no findings, write: "No documentation gaps identified."]
-
-[Otherwise, list each finding as follows:]
-
-#### [Finding number]. [Short title describing the gap]
-- **Severity**: CRITICAL | MAJOR | MINOR
-- **Category**: [Category letter and name from Phase 2]
-- **Blast radius**: BROAD | NARROW
-- **Code change**: [File path and brief description of what changed]
-- **Expected documentation**: [Which doc file should be updated, or where new
-  docs should be added]
-- **What is missing**: [Specific description of the documentation gap]
-- **Suggested text**: [Exact text to add or replace, if confidence is high
-  enough. Otherwise: "Manual review recommended -- [reason]."]
-
-### Notes
-[Optional section for contextual observations that do not rise to the level of
-a finding. Examples: advisory about missing foundational docs, areas not fully
-assessed due to PR scale, documentation structure improvements.]
-
----
+Read the report template at `templates/pr-review-report.md` and follow its
+structure exactly. Do not deviate from the format defined in the template.
 
 ## Guardrails
 NEVER do the following:
