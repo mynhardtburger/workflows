@@ -31,11 +31,11 @@ Run the fetch script to collect all PR data:
 This produces:
 
 - `artifacts/pr-review/index.json` — summary of all open PRs
-- `artifacts/pr-review/prs/{number}.json` — detailed data per PR
+- `artifacts/pr-review/prs/{number}.json` — detailed data per PR (**do not read directly** — these can exceed token limits. Use the analysis and summary files instead.)
 
 ### Data Structure Reference
 
-Each `prs/{number}.json` file has this top-level structure:
+Each `prs/{number}.json` file has this top-level structure (for reference — the analyze script reads these, you don't need to):
 
 ```json
 {

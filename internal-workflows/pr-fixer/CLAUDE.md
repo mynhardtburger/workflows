@@ -40,7 +40,9 @@ This produces:
 - `artifacts/pr-fixer/{number}/pr.json` — PR metadata (title, body, labels, branch, mergeable status, etc.)
 - `artifacts/pr-fixer/{number}/comments.json` — unified chronological comment stream (all comments merged — may be large)
 - `artifacts/pr-fixer/{number}/comments/01.json`, `02.json`, ... — **individual comment files** (read these instead of the full `comments.json` to stay under token limits)
-- `artifacts/pr-fixer/{number}/diff.json` — diff files with patches (may be large for big PRs — use `jq` to extract specific files)
+- `artifacts/pr-fixer/{number}/diff-index.txt` — **tab-separated file listing** (status, additions, deletions, filename) — read this to see what files changed
+- `artifacts/pr-fixer/{number}/diffs/{filename}.json` — **per-file diff** with patch — read individual files as needed
+- `artifacts/pr-fixer/{number}/diff.json` — all diffs in one array (**do not read directly** — may exceed token limits)
 - `artifacts/pr-fixer/{number}/ci.json` — check run results
 
 ### Phase 2: Assess PR State
@@ -52,7 +54,7 @@ Then drill into details only as needed:
 1. **Merge conflicts** — summary.md shows mergeable status. If `CONFLICTING`, rebase is needed first.
 2. **CI status** — summary.md lists failing checks. Read `ci.json` only if you need the full check run details.
 3. **Review comments** — summary.md shows counts and authors. Read individual comment files (`comments/01.json`, `02.json`, etc.) **newest first** — start from the highest number. Don't read `comments.json` directly (it may exceed token limits).
-4. **Diff** — if the diff is large, use `jq '.[] | .filename'` to list files first, then read individual file patches with `jq '.[] | select(.filename == "path/to/file.go")'`.
+4. **Diff** — read `diff-index.txt` to see all changed files. Then read individual file diffs from `diffs/{filename}.json` as needed. **Never read `diff.json` directly** — it may exceed token limits.
 
 Determine the fix order:
 1. Rebase first (if conflicts exist) — everything else depends on a clean base
