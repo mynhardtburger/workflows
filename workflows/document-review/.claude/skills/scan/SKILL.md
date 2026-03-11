@@ -52,7 +52,7 @@ Search for documentation using multiple strategies:
 **Standard documentation files (project root):**
 
 - `README*` (README.md, README.rst, README.txt, etc.)
-- `CONTRIBUTING*`, `CHANGELOG*`, `CHANGES*`, `HISTORY*`
+- `CONTRIBUTING*`
 - `LICENSE*`, `NOTICE*`, `AUTHORS*`
 - `SECURITY*`, `CODE_OF_CONDUCT*`
 - `CLAUDE.md`, `AGENTS.md` (AI-specific docs)
@@ -127,65 +127,13 @@ Without doing a deep review, flag obvious gaps:
 - Project has a public API but no API reference docs
 - No contributing guide despite accepting PRs
 - No installation guide despite requiring setup
-- No changelog despite multiple releases
 - Documentation exists but is clearly outdated (e.g., references very old
   versions)
 
 ### Step 6: Write the Inventory
 
-Write the inventory to `artifacts/document-review/inventory.md`:
-
-```markdown
-# Documentation Inventory
-
-**Project:** [name]
-**Scanned:** [date]
-**Scope:** [full project | specific paths]
-
-## Summary
-
-- **Total documentation files:** N
-- **Formats:** md (X), rst (Y), ...
-- **Total approximate size:** N lines / N words
-- **Documentation structure:** [flat | hierarchical | doc-site framework]
-
-## Documents by Category
-
-### User Documentation
-
-| Path | Format | Size | Topic | Has Instructions |
-|------|--------|------|-------|-----------------|
-| ... | ... | ... | ... | Yes/No |
-
-### Developer Documentation
-
-| Path | Format | Size | Topic | Has Instructions |
-|------|--------|------|-------|-----------------|
-| ... | ... | ... | ... | Yes/No |
-
-### Operational Documentation
-
-| Path | Format | Size | Topic | Has Instructions |
-|------|--------|------|-------|-----------------|
-| ... | ... | ... | ... | Yes/No |
-
-### Project Metadata
-
-| Path | Format | Size | Topic |
-|------|--------|------|-------|
-| LICENSE | ... | ... | ... |
-| ... | ... | ... | ... |
-
-## Documentation Structure
-
-[Description of how docs are organized, any doc-site framework, navigation]
-
-## Preliminary Gaps
-
-- [Gap 1]
-- [Gap 2]
-- ...
-```
+Follow the template at `templates/inventory.md` exactly. Write the inventory to
+`artifacts/document-review/inventory.md`.
 
 ## Output
 
