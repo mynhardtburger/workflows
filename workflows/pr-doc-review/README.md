@@ -60,16 +60,18 @@ The review follows a five-phase process:
 
 ## Workflow Structure
 
-```
-workflows/doc-checker/
+```text
+workflows/pr-doc-review/
 ├── .ambient/
 │   └── ambient.json              # Workflow configuration
 ├── .claude/
 │   ├── commands/
-│   │   └── review-pr.md          # /review-pr command
+│   │   └── pr-doc-review.md      # /pr-doc-review command
 │   └── skills/
-│       └── review-pr/
+│       └── pr-doc-review/
 │           └── SKILL.md          # Full review methodology
+├── templates/
+│   └── pr-review-report.md       # Report output template
 ├── CLAUDE.md                     # Behavioral guidelines
 └── README.md                     # This file
 ```
