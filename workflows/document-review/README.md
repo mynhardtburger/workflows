@@ -22,6 +22,7 @@ workflows/document-review/
 │   ├── commands/
 │   │   ├── scan.md               # Discover and catalog docs
 │   │   ├── review.md             # Quality review
+│   │   ├── review-pr.md          # PR documentation review
 │   │   ├── verify.md             # Code cross-referencing
 │   │   ├── test.md               # Execute documented instructions
 │   │   ├── report.md             # Summary report
@@ -31,10 +32,13 @@ workflows/document-review/
 │       ├── controller/SKILL.md   # Phase orchestration
 │       ├── scan/SKILL.md         # Document discovery
 │       ├── review/SKILL.md       # Quality evaluation
+│       ├── review-pr/SKILL.md    # PR doc completeness review
 │       ├── verify/SKILL.md       # Source code verification
 │       ├── test/SKILL.md         # Instruction execution
 │       ├── report/SKILL.md       # Report generation
 │       └── fix/SKILL.md          # Fix suggestion generation
+├── templates/
+│   └── pr-review-report.md       # PR review output template
 ├── CLAUDE.md                     # Behavioral context
 └── README.md                     # This file
 ```
