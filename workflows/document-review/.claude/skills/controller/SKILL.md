@@ -97,19 +97,28 @@ user requests several), use the Agent tool to launch them as parallel
 sub-agents:
 
 1. **Announce** which sub-agents you're launching in parallel
-2. **Spawn Agent calls simultaneously** (include whichever are requested):
+2. **Check whether `$CLUSTER_URL` and `$CLUSTER_TOKEN` are set** by running:
+
+   ```bash
+   echo "CLUSTER_URL=${CLUSTER_URL:-(not set)}" && echo "CLUSTER_TOKEN=${CLUSTER_TOKEN:+(set)}"
+   ```
+
+3. **Spawn Agent calls simultaneously:**
    - Agent (review): Read `.claude/skills/review/SKILL.md` and execute it.
      Write output to `artifacts/document-review/findings-review.md`.
    - Agent (verify): Read `.claude/skills/verify/SKILL.md` and execute it.
      Write output to `artifacts/document-review/findings-verify.md`.
-   - Agent (install-test): Read `.claude/skills/install-test/SKILL.md` and
-     execute it. Write output to
-     `artifacts/document-review/findings-install-test.md`.
-3. **Wait** for all agents to complete
-4. **Run cluster cleanup** if install-test was dispatched (see "Cluster
+   - Agent (install-test): **Include this agent when `$CLUSTER_URL` and
+     `$CLUSTER_TOKEN` are both set.** Read
+     `.claude/skills/install-test/SKILL.md` and execute it. Write output to
+     `artifacts/document-review/findings-install-test.md`. The skill itself
+     handles the case where no installation docs exist (writes a skip file),
+     so do not pre-filter based on document content.
+4. **Wait** for all agents to complete
+5. **Run cluster cleanup** if install-test was dispatched (see "Cluster
    Cleanup" below)
-5. **Run validation** (see below)
-6. **Summarize** the combined results to the user
+6. **Run validation** (see below)
+7. **Summarize** the combined results to the user
 
 When running a single phase (e.g., user invokes only `/review`), execute it
 directly — no sub-agent needed. Still run validation afterward. If the single
@@ -222,8 +231,8 @@ make sense:
 
 - Recommend `/review` — the natural next step
 - Offer `/verify` if documentation references lots of code (APIs, CLI flags)
-- Offer `/install-test` if installation docs were found and a cluster is
-  available (`$CLUSTER_URL` and `$CLUSTER_TOKEN` must be set)
+- Offer `/install-test` if `$CLUSTER_URL` and `$CLUSTER_TOKEN` are set (the
+  skill itself handles the case where no installation docs exist)
 - Mention that review, verify, and install-test can run in parallel
 - Offer `/speedrun` if the user wants to go fast
 
@@ -274,10 +283,12 @@ Other options:
 When the user invokes `/speedrun`:
 
 1. Execute the **scan** phase — announce it, read the skill, run it
-2. Launch **review**, **verify**, and **install-test** as parallel sub-agents
-   (see "Running Analysis Sub-Agents in Parallel" above). Skip install-test
-   if no installation docs were found or no cluster is available
-   (`$CLUSTER_URL` and `$CLUSTER_TOKEN` must be set).
+2. **Check whether `$CLUSTER_URL` and `$CLUSTER_TOKEN` are set** (see
+   "Running Analysis Sub-Agents in Parallel" above for the check command).
+   Launch **review**, **verify**, and — if both env vars are set —
+   **install-test** as parallel sub-agents. Only skip install-test when
+   the env vars are missing; do not skip based on scan results (the
+   install-test skill handles the "no installation docs" case itself).
 3. **Run cluster cleanup** if install-test was dispatched (see "Cluster
    Cleanup" above)
 4. **Run validation** — retry any failing sub-agents (max 1 retry)
