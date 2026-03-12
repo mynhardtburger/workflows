@@ -1,15 +1,14 @@
 {
-  "name": "PR Overview",
-  "description": "Review open PRs for merge readiness and generate a prioritized merge meeting doc",
-  "systemPrompt": "You are a PR review agent for merge meetings. Follow the instructions in CLAUDE.md to execute the workflow: fetch PR data, analyze, evaluate reviews, test merge order, manage milestone, write report, and update milestone description. Be thorough but concise — the output should be scannable in a meeting.",
-  "startupPrompt": "You are the PR Overview agent. Follow the instructions in CLAUDE.md. Start with the 8-step task checklist and complete every step.",
+  "name": "Review Queue",
+  "description": "Evaluate open PRs and generate a prioritized review queue — an ordered list of what needs human attention, ranked by type and urgency",
+  "systemPrompt": "You are a PR review queue agent. Follow the instructions in CLAUDE.md to execute the workflow: fetch PR data, analyze, evaluate each PR via sub-agents, manage milestone, write report, and update milestone description. The output is an attention-ordered queue — bug fixes and small PRs first.",
+  "startupPrompt": "You are the Review Queue agent. Follow the instructions in CLAUDE.md. Start with the 9-step task checklist and complete every step.",
   "results": {
-    "Merge Meeting Report": "artifacts/pr-review/merge-meeting-{date}.md",
-    "Analysis Summary": "artifacts/pr-review/analysis.json",
-    "Merge Test Results": "artifacts/pr-review/merge-test.json"
+    "Review Queue Report": "artifacts/pr-review/review-queue-{date}.md",
+    "Analysis Summary": "artifacts/pr-review/analysis.json"
   },
   "rubric": {
-    "activationPrompt": "After completing all 8 checklist items and updating the milestone description, evaluate your own execution efficiency using .ambient/rubric.md. Score yourself on 5 criteria (1-5 each) for a total out of 25. Be honest — flag any truncation issues, failed commands, unnecessary tool calls, or workarounds you had to use.",
+    "activationPrompt": "After completing all checklist items and updating the milestone description, evaluate your own execution efficiency using .ambient/rubric.md. Score yourself on 5 criteria (1-5 each) for a total out of 25. Be honest — flag any truncation issues, failed commands, unnecessary tool calls, or workarounds you had to use.",
     "schema": {
       "type": "object",
       "properties": {

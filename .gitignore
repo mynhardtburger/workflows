@@ -42,3 +42,4 @@ node_modules/
 
 # Optional: uncomment to ignore ad-hoc scratch files
 # sample.txt
+.claude/worktrees/

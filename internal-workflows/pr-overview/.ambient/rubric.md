@@ -1,6 +1,6 @@
-# PR Review Workflow — Execution Efficiency Rubric
+# Review Queue — Execution Efficiency Rubric
 
-This rubric evaluates how efficiently the PR review agent executed the workflow. It is triggered after the merge meeting report is written. The purpose is to identify inefficiencies — wasted tool calls, workarounds, truncation issues, failed commands — so the workflow can be continuously improved. The output is a score out of 25 (aggregate of 5 criteria at 5 points each) and a brief explanation.
+This rubric evaluates how efficiently the review queue agent executed the workflow. It is triggered after the report is written and the milestone updated. The purpose is to identify inefficiencies so the workflow can be continuously improved. The output is a score out of 25 (aggregate of 5 criteria at 5 points each) and a brief explanation.
 
 ---
 
@@ -24,7 +24,7 @@ Did the agent avoid flooding its context with large data?
 
 - **Score 1**: Agent read raw PR files (50KB+) directly into its context. Multiple "output too large" truncation errors. Critical data was lost.
 - **Score 2**: Agent read analysis.json when it was too large, causing truncation. Had to re-read with offset/limit workarounds.
-- **Score 3**: Agent used the split file structure (analysis.json summary + per-PR files) but read more files than necessary — e.g., reading all 49 PR detail files instead of just the ones needed.
+- **Score 3**: Agent used the split file structure (analysis.json summary + per-PR files) but read more files than necessary.
 - **Score 4**: Agent read only the summary and the specific per-PR files needed. Used sub-agents for review evaluation. Minor unnecessary reads.
 - **Score 5**: Agent read the compact summary once, delegated review evaluation to parallel sub-agents, and only read individual analysis files for report generation. Zero truncation, zero wasted reads.
 
@@ -36,23 +36,21 @@ Did the agent avoid flooding its context with large data?
 
 Did the agent complete the workflow in a reasonable number of tool calls?
 
-- **Score 1**: 50+ tool calls. Extensive thrashing — rewriting scripts, debugging edge cases inline, running analysis multiple times.
-- **Score 2**: 40-49 tool calls. Significant wasted calls on exploration, debugging, or re-doing completed work.
-- **Score 3**: 30-39 tool calls. Some unnecessary investigation but generally on track. Maybe read a few extra files or ran extra verification commands.
-- **Score 4**: 20-29 tool calls. Efficient execution with minimal waste. Used parallel sub-agents where appropriate.
+- **Score 1**: 50+ tool calls. Extensive thrashing.
+- **Score 2**: 40-49 tool calls. Significant wasted calls.
+- **Score 3**: 30-39 tool calls. Some unnecessary investigation but generally on track.
+- **Score 4**: 20-29 tool calls. Efficient execution with minimal waste.
 - **Score 5**: Under 20 tool calls. Ran scripts, delegated review to sub-agents, synced milestone, wrote report, updated milestone description — all with no wasted steps.
 
 **Benchmark**: The ideal workflow is approximately:
 1. Read CLAUDE.md + template (2 calls)
 2. Run fetch-prs.sh (1 call)
 3. Run analyze-prs.py (1 call)
-4. Spawn parallel sub-agents for review evaluation (1-3 calls)
-5. Run test-merge-order.sh (1 call)
-6. Find/create milestone + sync PRs (2-3 calls)
-7. Read analysis summary + needed per-PR files (3-5 calls)
-8. Write report (1 call)
-9. Update milestone description (1 call)
-Total: ~15-20 calls
+4. Read analysis summary + spawn parallel sub-agents for per-PR evaluation (2-4 calls)
+5. Find/create milestone + sync PRs + comment on blocked (3-5 calls)
+6. Write report (1 call)
+7. Update milestone description (1 call)
+Total: ~11-15 calls
 
 ---
 
@@ -60,32 +58,33 @@ Total: ~15-20 calls
 
 When something went wrong, did the agent recover gracefully or spiral?
 
-- **Score 1**: A single error caused the agent to abandon the approach entirely and start over with a different strategy (e.g., rewriting the analysis script from scratch).
-- **Score 2**: Errors caused multi-step debugging sessions (5+ tool calls to diagnose and fix a single issue).
-- **Score 3**: Agent encountered errors and recovered within 2-3 tool calls but wasted time on the wrong diagnosis first.
-- **Score 4**: Agent encountered a minor error and recovered in 1 call (e.g., a missing file, retried with correct path).
+- **Score 1**: A single error caused the agent to abandon the approach entirely and start over.
+- **Score 2**: Errors caused multi-step debugging sessions (5+ tool calls to diagnose and fix).
+- **Score 3**: Agent encountered errors and recovered within 2-3 tool calls.
+- **Score 4**: Agent encountered a minor error and recovered in 1 call.
 - **Score 5**: No errors encountered, or the agent's first recovery attempt succeeded immediately.
 
-**Red flags**: Agent writing replacement scripts when the provided one fails. Retrying the same failing command. Long debugging chains where the agent tries multiple hypotheses before finding the issue.
+**Red flags**: Agent writing replacement scripts when the provided one fails. Retrying the same failing command. Long debugging chains.
 
 ---
 
 ## Criterion 5: Completeness (1-5 points)
 
-Did the agent complete ALL 8 checklist items?
+Did the agent complete ALL 9 checklist items?
 
-- **Score 1**: Completed 4 or fewer items. Major deliverables missing (no report, no milestone update).
+- **Score 1**: Completed 4 or fewer items. Major deliverables missing.
 - **Score 2**: Completed 5-6 items. Report was written but milestone was not updated, or review evaluation was skipped.
-- **Score 3**: Completed 7 items. One step was skipped or done incorrectly (e.g., milestone synced but description not updated).
-- **Score 4**: All 8 items completed but with minor issues (e.g., merge test skipped because script wasn't found, report missing one section).
-- **Score 5**: All 8 items completed correctly: fetch → analyze → review evaluation → merge test → milestone find/create → milestone sync → write report → update milestone description.
+- **Score 3**: Completed 7 items. One or two steps skipped or done incorrectly.
+- **Score 4**: All 9 items completed but with minor issues.
+- **Score 5**: All 9 items completed correctly: fetch, analyze, sub-agent evaluation, milestone find/create, milestone sync, blocker comments, write report, update milestone, self-evaluate.
 
-**The 8 checklist items**:
+**The 9 checklist items**:
 1. Run fetch-prs.sh
 2. Run analyze-prs.py
-3. Evaluate review comments (via sub-agents)
-4. Run test-merge-order.sh
-5. Find or create Merge Queue milestone
-6. Sync PRs to milestone
-7. Write the merge meeting report
-8. Update milestone description with the report
+3. Evaluate PRs via sub-agents
+4. Find or create Review Queue milestone
+5. Sync PRs to milestone
+6. Comment on blocked PRs
+7. Write the review queue report
+8. Update milestone description
+9. Self-evaluate execution
