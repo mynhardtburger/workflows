@@ -15,9 +15,10 @@ quality of the documentation itself — you evaluate the quality of the
 You will be given:
 
 - The inventory file: `artifacts/document-review/inventory.md`
-- One or both findings files to validate:
+- One or more findings files to validate:
   - `artifacts/document-review/findings-review.md`
   - `artifacts/document-review/findings-verify.md`
+  - `artifacts/document-review/findings-usage-test.md`
 
 Read all files that exist before starting validation.
 
@@ -105,6 +106,50 @@ Run these checks in order. Record every failure.
   **Prevention** fields.
 - Solutions must contain actual commands or steps, not vague advice.
 
+### For findings-usage-test.md
+
+**1. Coverage — Were usage docs actually tested?**
+
+- The file should reference at least one document from the inventory that
+  contains usage or post-installation instructions.
+- `Interactions executed` must be an actual number, not `N` or `0`.
+
+**2. Metadata — Are placeholders filled in?**
+
+- Header must not contain unfilled placeholders like `[name]` or `[date]`.
+- `Cluster`, `Documents tested`, `Interactions executed`, `Interactions
+  passed`, and `Interactions failed` must all have real values.
+
+**3. Summary table — Are statistics present?**
+
+- The execution summary table must exist with actual counts.
+- The total should be consistent (pass + fail categories = interactions
+  executed).
+
+**4. Finding structure — Does each finding have required fields?**
+
+- Every interaction finding must have:
+  - **Source** (document path, section, line)
+  - **Interaction** (what was executed)
+  - **Expected result** (what docs say)
+  - **Actual result** (what happened)
+  - **Severity**
+  - **Dimension**
+- Flag any finding missing a required field.
+
+**5. User journey assessment — Is it present and substantive?**
+
+- The User Journey Assessment section must exist and contain actual analysis,
+  not placeholder text.
+- It should address discoverability, completeness, feedback, and error paths.
+
+**6. Troubleshooting guide — Are errors documented with solutions?**
+
+- If any interactions failed, the Troubleshooting Guide section must exist.
+- Each troubleshooting entry must have **When**, **Cause**, **Solution**, and
+  **Prevention** fields.
+- Solutions must contain actual commands or steps, not vague advice.
+
 ### For findings-verify.md
 
 **1. Coverage — Were verifiable claims actually checked?**
@@ -161,6 +206,15 @@ Return your validation result in exactly this format:
 - **No steps tested**: File contains 0 executed steps
 - **Missing field**: Step 2 in `INSTALL.md` is missing **Actual result**
 - **Missing troubleshooting**: Steps failed but no Troubleshooting Guide
+
+### findings-usage-test.md: PASS | FAIL
+
+[If FAIL, list each failure:]
+
+- **No interactions tested**: File contains 0 executed interactions
+- **Missing field**: Interaction 2 in `USAGE.md` is missing **Actual result**
+- **Missing troubleshooting**: Interactions failed but no Troubleshooting Guide
+- **Missing user journey**: No User Journey Assessment section
 
 ### findings-verify.md: PASS | FAIL
 
