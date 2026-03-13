@@ -10,6 +10,7 @@ Systematic workflow for reviewing a project's documentation — assessing qualit
 - Cross-references documentation claims against source code
 - Runs review, verify, and install-test in parallel as sub-agents for speed
 - Executes installation instructions on a live cluster to verify accuracy
+- Interacts with the installed project as a user would to verify usage docs
 - Tracks common installation errors and their solutions for fix generation
 - Automatically reverts cluster changes after install-test via cleanup agent
 - Validates sub-agent output and retries on quality failures
@@ -30,6 +31,7 @@ workflows/document-review/
 │   │   ├── report.md             # Summary report
 │   │   ├── fix.md                # Fix suggestions
 │   │   ├── install-test.md       # Installation testing
+│   │   ├── usage-test.md         # Post-install usage testing
 │   │   ├── cleanup.md            # Cluster cleanup
 │   │   └── speedrun.md           # Full pipeline
 │   └── skills/
@@ -38,6 +40,7 @@ workflows/document-review/
 │       ├── review/SKILL.md       # Quality evaluation
 │       ├── verify/SKILL.md       # Source code verification
 │       ├── install-test/SKILL.md # Installation instruction testing
+│       ├── usage-test/SKILL.md   # Post-install usage verification
 │       ├── cleanup/SKILL.md      # Cluster change reversal
 │       ├── validate/SKILL.md     # Output validation
 │       ├── report/SKILL.md       # Report generation
@@ -47,6 +50,7 @@ workflows/document-review/
 │   ├── findings-review.md
 │   ├── findings-verify.md
 │   ├── findings-install-test.md
+│   ├── findings-usage-test.md
 │   ├── cluster-changes.md
 │   ├── cleanup-report.md
 │   ├── report.md
@@ -63,22 +67,24 @@ workflows/document-review/
 | `/review` | Deep quality review against 7 dimensions |
 | `/verify` | Cross-reference docs against source code (optional) |
 | `/install-test` | Execute installation instructions on a cluster (optional) |
-| `/cleanup` | Revert cluster changes from install-test (runs automatically) |
+| `/usage-test` | Interact with the installed project and verify usage docs (optional) |
+| `/cleanup` | Revert cluster changes from install-test and usage-test (runs automatically) |
 | `/report` | Generate prioritized findings summary |
 | `/fix` | Generate inline fix suggestions (optional) |
-| `/speedrun` | Run scan → review + verify + install-test → cleanup → report in one shot |
+| `/speedrun` | Run scan → review + verify + install-test → usage-test → cleanup → report in one shot |
 
 ## Workflow Phases
 
 ```text
-scan ──┬──> review (sub-agent) ────────┬──> validate ──> report ──> fix
-       ├──> verify (sub-agent) ────────┤       ↑  │
-       └──> install-test (sub-agent) ──┘       └──┘
-                    │                      (retry on fail,
-                    └──> cleanup            max 1 retry)
+scan ──┬──> review (sub-agent) ──────────────────┬──> validate ──> report ──> fix
+       ├──> verify (sub-agent) ──────────────────┤       ↑  │
+       └──> install-test (sub-agent) ────────────┘       └──┘
+                    │                                (retry on fail,
+                    ├──> usage-test (if succeeded)    max 1 retry)
+                    └──> cleanup
 ```
 
-Review, verify, and install-test are independent after scan — they run in parallel as sub-agents, each writing to its own findings file. After install-test completes, a cleanup agent automatically reverts all cluster changes using the change log. A validation sub-agent then checks findings output for coverage, structure, and evidence quality, retrying failed agents once before proceeding.
+Review, verify, and install-test are independent after scan — they run in parallel as sub-agents, each writing to its own findings file. After a successful install-test, a usage-test agent interacts with the installed project as a user would, verifying that usage documentation matches the actual experience. A cleanup agent then reverts all cluster changes from both install-test and usage-test using the change log. A validation sub-agent checks findings output for coverage, structure, and evidence quality, retrying failed agents once before proceeding.
 
 ### 1. Scan
 
@@ -96,15 +102,19 @@ Cross-references documentation claims against actual source code. Checks CLI fla
 
 Executes documented installation instructions on a live OpenShift cluster. Compares actual results against documented expectations step by step. When a step fails, troubleshoots the root cause to determine the correct procedure. Tracks every error a user might encounter along with its solution, producing a troubleshooting guide that `/fix` uses to add error-handling guidance to the documentation. Logs all cluster changes to a change log for cleanup.
 
-### 5. Cleanup (Automatic)
+### 5. Usage-test (Optional)
 
-Runs automatically after install-test completes. Reads the cluster change log and reverts all modifications in reverse order — deleting created resources, restoring modified resources, and undoing shell script effects. Reports any changes that could not be reverted so the user can clean up manually.
+Runs automatically after a successful install-test. Interacts with the installed project as a user would — executing documented API calls, CLI commands, workflows, and interactions on the live cluster. Compares the actual user experience against what the documentation describes. Appends cluster changes to the same change log for cleanup. Produces a troubleshooting guide that `/fix` uses to add error-handling guidance to usage documentation.
 
-### 7. Report
+### 6. Cleanup (Automatic)
+
+Runs automatically after usage-test and install-test complete. Reads the cluster change log and reverts all modifications in reverse order — deleting created resources, restoring modified resources, and undoing shell script effects. Reports any changes that could not be reverted so the user can clean up manually.
+
+### 8. Report
 
 Generates a prioritized executive summary with overall health ratings per dimension, top issues, per-document breakdown, and recommended fix priority. Reads from whichever findings files exist.
 
-### 8. Fix (Optional)
+### 9. Fix (Optional)
 
 Generates inline fix suggestions for each finding. Quotes problematic text, provides replacement, and explains rationale. Groups suggestions by file.
 
@@ -140,6 +150,7 @@ All artifacts are written to `artifacts/document-review/`:
 | `findings-review.md` | Detailed findings by document |
 | `findings-verify.md` | Code verification findings |
 | `findings-install-test.md` | Installation test findings and troubleshooting guide |
+| `findings-usage-test.md` | Usage test findings and troubleshooting guide |
 | `cluster-changes.md` | Log of all cluster modifications for cleanup |
 | `cleanup-report.md` | Cleanup results and any failed reverts |
 | `report.md` | Executive summary |
@@ -152,5 +163,6 @@ All artifacts are written to `artifacts/document-review/`:
 3. Run `/review` for quality analysis
 4. Optionally run `/verify` to check docs against code
 5. Optionally run `/install-test` to execute installation steps on a cluster
-6. Run `/report` for a prioritized summary
+6. Usage-test runs automatically after a successful install-test
+7. Run `/report` for a prioritized summary
 7. Optionally run `/fix` for concrete fix suggestions

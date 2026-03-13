@@ -37,6 +37,7 @@ Read whichever findings files exist:
 - `artifacts/document-review/findings-review.md` (from `/review`)
 - `artifacts/document-review/findings-verify.md` (from `/verify`)
 - `artifacts/document-review/findings-install-test.md` (from `/install-test`)
+- `artifacts/document-review/findings-usage-test.md` (from `/usage-test`)
 
 Also read `artifacts/document-review/inventory.md` for context.
 
@@ -86,6 +87,11 @@ Check whether optional phases were skipped and note the reason in the report:
   skipped: cluster credentials not available").
 - If `findings-install-test.md` does not exist at all, note that installation
   testing was not performed.
+- If `findings-usage-test.md` exists and contains `**Status:** Skipped`,
+  include a note with the skip reason (e.g., "Usage-test was skipped:
+  install-test did not succeed").
+- If `findings-usage-test.md` does not exist at all, note that usage testing
+  was not performed.
 - If `findings-verify.md` does not exist, note that code verification was not
   performed.
 
