@@ -30,6 +30,7 @@ workflows/document-review/
 │   │   ├── verify.md             # Code cross-referencing
 │   │   ├── report.md             # Summary report
 │   │   ├── fix.md                # Fix suggestions
+│   │   ├── create-prs.md         # PR creation
 │   │   ├── install-test.md       # Installation testing
 │   │   ├── usage-test.md         # Post-install usage testing
 │   │   ├── cleanup.md            # Cluster cleanup
@@ -44,7 +45,8 @@ workflows/document-review/
 │       ├── cleanup/SKILL.md      # Cluster change reversal
 │       ├── validate/SKILL.md     # Output validation
 │       ├── report/SKILL.md       # Report generation
-│       └── fix/SKILL.md          # Fix suggestion generation
+│       ├── fix/SKILL.md          # Fix suggestion generation
+│       └── create-prs/SKILL.md   # PR creation from fixes
 ├── templates/                    # Output format templates
 │   ├── inventory.md
 │   ├── findings-review.md
@@ -54,7 +56,8 @@ workflows/document-review/
 │   ├── cluster-changes.md
 │   ├── cleanup-report.md
 │   ├── report.md
-│   └── fixes.md
+│   ├── fixes.md
+│   └── pr-log.md
 ├── CLAUDE.md                     # Behavioral context
 └── README.md                     # This file
 ```
@@ -71,12 +74,13 @@ workflows/document-review/
 | `/cleanup` | Revert cluster changes from install-test and usage-test (runs automatically) |
 | `/report` | Generate prioritized findings summary |
 | `/fix` | Generate inline fix suggestions (optional) |
+| `/create-prs` | Create GitHub pull requests from fix suggestions (optional) |
 | `/speedrun` | Run scan → review + verify + install-test → usage-test → cleanup → report in one shot |
 
 ## Workflow Phases
 
 ```text
-scan ──┬──> review (sub-agent) ──────────────────┬──> validate ──> report ──> fix
+scan ──┬──> review (sub-agent) ──────────────────┬──> validate ──> report ──> fix ──> create-prs
        ├──> verify (sub-agent) ──────────────────┤       ↑  │
        └──> install-test (sub-agent) ────────────┘       └──┘
                     │                                (retry on fail,
@@ -116,7 +120,11 @@ Generates a prioritized executive summary with overall health ratings per dimens
 
 ### 9. Fix (Optional)
 
-Generates inline fix suggestions for each finding. Quotes problematic text, provides replacement, and explains rationale. Groups suggestions by file.
+Generates inline fix suggestions for each finding. Quotes problematic text, provides replacement, and explains rationale. Groups suggestions into pull request units with automatable classification and self-contained context for reliable text matching.
+
+### 10. Create PRs (Optional)
+
+Creates draft GitHub pull requests from automatable fix suggestions. Only fixes classified as `Automatable: Yes` are applied — non-automatable fixes that need human decisions are skipped entirely. All PRs are created as drafts so a human reviewer can verify the changes before merging. Produces a PR log tracking what was created and any fixes skipped.
 
 ## Quality Dimensions
 
@@ -154,7 +162,8 @@ All artifacts are written to `artifacts/document-review/`:
 | `cluster-changes.md` | Log of all cluster modifications for cleanup |
 | `cleanup-report.md` | Cleanup results and any failed reverts |
 | `report.md` | Executive summary |
-| `fixes.md` | Inline fix suggestions |
+| `fixes.md` | Inline fix suggestions with PR grouping |
+| `pr-log.md` | Created PR links and status |
 
 ## Quick Start
 
@@ -165,4 +174,5 @@ All artifacts are written to `artifacts/document-review/`:
 5. Optionally run `/install-test` to execute installation steps on a cluster
 6. Usage-test runs automatically after a successful install-test
 7. Run `/report` for a prioritized summary
-7. Optionally run `/fix` for concrete fix suggestions
+8. Optionally run `/fix` for concrete fix suggestions
+9. Optionally run `/create-prs` to submit fixes as GitHub pull requests

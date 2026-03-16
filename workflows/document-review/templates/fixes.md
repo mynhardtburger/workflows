@@ -127,38 +127,37 @@ conducted against — if the base branch has advanced significantly since that
 commit, verify that the **Context** blocks still match the current file
 contents before applying fixes.
 
+### Which fixes to apply
+
+- **Automatable: Yes** — apply the fix.
+- **Automatable: No** — skip the fix entirely. Do not create a PR for it.
+  These fixes require human decisions or missing information that cannot be
+  resolved autonomously. If every fix in a PR group is `Automatable: No`,
+  skip the entire PR.
+
 ### How to apply each fix
 
 1. Open the target **File**
 2. Use the **Context** block to locate the exact text — search for the
    surrounding lines and find the target between `>>>` and `<<<` markers
 3. Replace the **Current text** with the **Replacement**
-4. For fixes with `Automatable: No`, insert the **Draft content** at the
-   indicated location and preserve `[TODO: ...]` markers for the reviewer
 
-### When to create a PR
+### PR creation rules
 
-- **Automatable: Yes** — Create the PR with all changes applied and request
-  review. The PR is ready to merge after standard review.
-- **Automatable: Partial** — Create the PR with automatable fixes applied and
-  needs-input fixes inserted with `[TODO: ...]` markers. Mark the PR as
-  **draft**. The PR description must list all items under "Human Input
-  Needed."
-- **Automatable: No** — Create the PR as a **draft** with the draft content
-  and `[TODO: ...]` markers. The PR description must list all items under
-  "Human Input Needed." These PRs exist to request specific information from
-  maintainers.
+- **Always create PRs as drafts.** Every PR must be a draft so a human
+  reviewer can verify the changes before merging.
+- Only include `Automatable: Yes` fixes in PRs.
 
 ### PR creation checklist
 
 - [ ] Branch name follows `docs/fix-[brief-slug]` convention
 - [ ] Branch is based on the latest base branch
+- [ ] Only `Automatable: Yes` fixes are included
 - [ ] Each fix is verified against its context block before applying
 - [ ] Commit messages reference the fix descriptions
 - [ ] PR title matches the suggested title
 - [ ] PR description includes the suggested description
-- [ ] Human input items appear as checkboxes in the PR description
-- [ ] PRs with any `Automatable: No` fixes are created as drafts
+- [ ] PR is created as a draft
 - [ ] No unrelated changes are included
 
 ### Ordering
