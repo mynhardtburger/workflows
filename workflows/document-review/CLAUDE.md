@@ -10,7 +10,8 @@ Systematic documentation review through these phases:
 6. **Cleanup** (`/cleanup`) — Revert cluster changes from install-test and usage-test (runs automatically)
 7. **Report** (`/report`) — Generate prioritized findings summary
 8. **Fix** (`/fix`) — *(Optional)* Generate inline fix suggestions
-9. **Speedrun** (`/speedrun`) — Run scan → review → report in one shot
+9. **Create PRs** (`/create-prs`) — *(Optional)* Create GitHub pull requests from fix suggestions
+10. **Speedrun** (`/speedrun`) — Run scan → review → report in one shot
 
 Review, verify, and install-test are independent — they can run in parallel as
 sub-agents after scan completes. Each writes to its own findings file.
