@@ -165,6 +165,51 @@ All artifacts are written to `artifacts/document-review/`:
 | `fixes.md` | Inline fix suggestions with PR grouping |
 | `pr-log.md` | Created PR links and status |
 
+## Prerequisites
+
+Most phases require only read access to the target project. The optional
+phases have additional requirements:
+
+| Phase | Requirement |
+|-------|-------------|
+| `/install-test`, `/usage-test`, `/cleanup` | `$CLUSTER_URL` and `$CLUSTER_TOKEN` for an OpenShift cluster |
+| `/create-prs` | `$GITHUB_TOKEN` with permission to fork, push, and open PRs (see below) |
+
+### GitHub Token for `/create-prs`
+
+The `/create-prs` phase forks the target repository, pushes branches to the
+fork, and opens draft pull requests against the upstream repository. This
+requires a GitHub token with the right scopes.
+
+**Classic Personal Access Token (recommended):**
+
+A Classic PAT with the **`public_repo`** scope is sufficient for public
+repositories. This single scope covers forking, pushing to the fork, and
+creating PRs on the upstream repo.
+
+```bash
+export GITHUB_TOKEN=ghp_...
+# or
+gh auth login --with-token <<< "$GITHUB_TOKEN"
+```
+
+If the target repository is private, use the **`repo`** scope instead.
+
+**Fine-grained Personal Access Token (untested alternative):**
+
+Fine-grained PATs are more restrictive but harder to configure for this
+workflow because the fork does not exist when the token is created and the
+upstream repository is owned by someone else. If using a fine-grained PAT:
+
+- Scope to **All repositories** owned by the token holder
+- Required permissions:
+  - **Contents:** Read and Write (push to the fork)
+  - **Pull requests:** Read and Write (open PRs)
+  - **Administration:** Read and Write (create the fork)
+
+This configuration has not been tested. The fork-then-PR-upstream flow may
+encounter edge cases with fine-grained PAT scoping.
+
 ## Quick Start
 
 1. Point the workflow at a project repository
