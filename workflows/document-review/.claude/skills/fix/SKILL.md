@@ -20,8 +20,8 @@ needs-human-input so a PR agent knows how to handle it.
 ## Critical Rules
 
 - **Findings must exist.** If neither
-  `artifacts/document-review/findings-review.md` nor
-  `artifacts/document-review/findings-verify.md` exists, inform the user and
+  `artifacts/findings-review.md` nor
+  `artifacts/findings-verify.md` exists, inform the user and
   recommend running `/review` first.
 - **Be specific.** Every suggestion must include the exact text to change and
   the exact replacement.
@@ -46,12 +46,12 @@ needs-human-input so a PR agent knows how to handle it.
 
 Read whichever findings files exist:
 
-- `artifacts/document-review/findings-review.md` (from `/review`)
-- `artifacts/document-review/findings-verify.md` (from `/verify`)
-- `artifacts/document-review/findings-install-test.md` (from `/install-test`)
-- `artifacts/document-review/findings-usage-test.md` (from `/usage-test`)
+- `artifacts/findings-review.md` (from `/review`)
+- `artifacts/findings-verify.md` (from `/verify`)
+- `artifacts/findings-install-test.md` (from `/install-test`)
+- `artifacts/findings-usage-test.md` (from `/usage-test`)
 
-Optionally read `artifacts/document-review/report.md` for priority guidance.
+Optionally read `artifacts/report.md` for priority guidance.
 
 If install-test or usage-test findings exist, pay special attention to the
 **Troubleshooting Guide** sections — use them to generate error-handling
@@ -139,11 +139,11 @@ For each PR group, generate:
 ### Step 4: Write the Fixes
 
 Follow the template at `templates/fixes.md` exactly. Write to
-`artifacts/document-review/fixes.md`.
+`artifacts/fixes.md`.
 
 ## Output
 
-- `artifacts/document-review/fixes.md`
+- `artifacts/fixes.md`
 
 ## When This Phase Is Done
 

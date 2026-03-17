@@ -19,8 +19,8 @@ duplicates another.
 ## Critical Rules
 
 - **Findings must exist.** If neither
-  `artifacts/document-review/findings-review.md` nor
-  `artifacts/document-review/findings-verify.md` exists, inform the user and
+  `artifacts/findings-review.md` nor
+  `artifacts/findings-verify.md` exists, inform the user and
   recommend running `/review` first.
 - **Include every finding.** This is not a summary — it is the consolidated
   record. Every finding from every phase must appear unless it is a duplicate.
@@ -38,12 +38,12 @@ duplicates another.
 
 Read whichever findings files exist:
 
-- `artifacts/document-review/findings-review.md` (from `/review`)
-- `artifacts/document-review/findings-verify.md` (from `/verify`)
-- `artifacts/document-review/findings-install-test.md` (from `/install-test`)
-- `artifacts/document-review/findings-usage-test.md` (from `/usage-test`)
+- `artifacts/findings-review.md` (from `/review`)
+- `artifacts/findings-verify.md` (from `/verify`)
+- `artifacts/findings-install-test.md` (from `/install-test`)
+- `artifacts/findings-usage-test.md` (from `/usage-test`)
 
-Also read `artifacts/document-review/inventory.md` for context.
+Also read `artifacts/inventory.md` for context.
 
 ### Step 2: Merge and Deduplicate
 
@@ -76,17 +76,17 @@ For each dimension, assign a qualitative rating:
 
 Check whether optional phases were skipped and note the reason in the report:
 
-- If `findings-install-test.md` exists and contains `**Status:** Skipped`,
+- If `artifacts/findings-install-test.md` exists and contains `**Status:** Skipped`,
   include a note in the report with the skip reason (e.g., "Install-test was
   skipped: cluster credentials not available").
-- If `findings-install-test.md` does not exist at all, note that installation
+- If `artifacts/findings-install-test.md` does not exist at all, note that installation
   testing was not performed.
-- If `findings-usage-test.md` exists and contains `**Status:** Skipped`,
+- If `artifacts/findings-usage-test.md` exists and contains `**Status:** Skipped`,
   include a note with the skip reason (e.g., "Usage-test was skipped:
   install-test did not succeed").
-- If `findings-usage-test.md` does not exist at all, note that usage testing
+- If `artifacts/findings-usage-test.md` does not exist at all, note that usage testing
   was not performed.
-- If `findings-verify.md` does not exist, note that code verification was not
+- If `artifacts/findings-verify.md` does not exist, note that code verification was not
   performed.
 
 This helps readers understand the scope of the review.
@@ -94,7 +94,7 @@ This helps readers understand the scope of the review.
 ### Step 5: Write the Report
 
 Follow the template at `templates/report.md` exactly. Write to
-`artifacts/document-review/report.md`.
+`artifacts/report.md`.
 
 Write every finding under its severity heading. Each finding must include:
 
@@ -111,7 +111,7 @@ Critical findings, omit the `## Critical` section entirely).
 
 ## Output
 
-- `artifacts/document-review/report.md`
+- `artifacts/report.md`
 
 ## When This Phase Is Done
 

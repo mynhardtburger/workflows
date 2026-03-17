@@ -11,14 +11,14 @@ to the target files, and create PRs using the suggested grouping.
 
 ## Your Role
 
-Read `artifacts/document-review/fixes.md`, apply the fixes to the actual
+Read `artifacts/fixes.md`, apply the fixes to the actual
 documentation files, and create GitHub pull requests. Follow the PR grouping,
 titles, descriptions, and automatable classifications exactly as specified
 in the fixes file.
 
 ## Critical Rules
 
-- **Fixes must exist.** If `artifacts/document-review/fixes.md` does not
+- **Fixes must exist.** If `artifacts/fixes.md` does not
   exist, inform the user and recommend running `/fix` first.
 - **Follow the fixes file exactly.** Use the PR titles, descriptions, and
   groupings as specified. Do not regroup or re-prioritize.
@@ -42,7 +42,7 @@ in the fixes file.
 
 ### Step 1: Load the Fixes File
 
-Read `artifacts/document-review/fixes.md`. Parse:
+Read `artifacts/fixes.md`. Parse:
 
 - Repository metadata (URL, base branch, base commit)
 - All PR groups with their fixes, titles, and descriptions
@@ -162,11 +162,11 @@ git checkout <starting-branch>
 ### Step 4: Write the PR Log
 
 Follow the template at `templates/pr-log.md`. Write to
-`artifacts/document-review/pr-log.md`.
+`artifacts/pr-log.md`.
 
 ## Output
 
-- `artifacts/document-review/pr-log.md`
+- `artifacts/pr-log.md`
 - GitHub pull requests (created on the remote)
 
 ## When This Phase Is Done

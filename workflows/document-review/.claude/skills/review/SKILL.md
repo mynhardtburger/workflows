@@ -18,7 +18,7 @@ you are not cross-referencing against source code (that's `/verify`).
 ## Critical Rules
 
 - **Read the inventory first.** This phase requires `/scan` to have been run.
-  If `artifacts/document-review/inventory.md` does not exist, inform the user
+  If `artifacts/inventory.md` does not exist, inform the user
   and recommend running `/scan` first.
 - **Process one file at a time.** Review each document completely, write its
   findings to the output file, then move to the next. Do not accumulate
@@ -194,12 +194,12 @@ missing verification, error handling, and rollback guidance.
 
 ### Step 1: Load the Inventory
 
-Read `artifacts/document-review/inventory.md` to understand what documents
+Read `artifacts/inventory.md` to understand what documents
 exist and how they're organized. Build a list of all document paths to review.
 
 ### Step 2: Initialize the Findings File
 
-Write the file header to `artifacts/document-review/findings-review.md` using
+Write the file header to `artifacts/findings-review.md` using
 the template at `templates/findings-review.md`. Fill in the date, repository,
 and instruction. Leave the summary table counts as `N` — you will update them
 at the end.
@@ -237,7 +237,7 @@ document:
    - **Evidence**: Quote the problematic text
    - **Fix**: The correction, if known with high confidence (omit if unsure)
    - **Audience impact**: How this affects the target audience
-8. **Append** the document's section to `artifacts/document-review/findings-review.md`
+8. **Append** the document's section to `artifacts/findings-review.md`
    immediately — including the document heading, audience assessment, and all
    findings (or an explicit note that no issues were found). Do not hold
    findings in memory across documents.
@@ -262,10 +262,10 @@ Append the `## Cross-Document Issues` section to the findings file.
 
 Read the findings file you have built. Count findings for each
 dimension × severity cell. Update the summary table at the top of
-`artifacts/document-review/findings-review.md` with the actual counts,
+`artifacts/findings-review.md` with the actual counts,
 replacing the placeholder `N` values. Include row totals (per dimension) and
 column totals (per severity).
 
 ## Output
 
-- `artifacts/document-review/findings-review.md`
+- `artifacts/findings-review.md`

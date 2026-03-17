@@ -89,13 +89,13 @@ scan ──┬──> review (sub-agent) ─────────────
 
 | Phase | Output |
 |-------|--------|
-| Review | `artifacts/document-review/findings-review.md` |
-| Verify | `artifacts/document-review/findings-verify.md` |
-| Install-test | `artifacts/document-review/findings-install-test.md` |
-| Install-test | `artifacts/document-review/cluster-changes.md` (change log) |
-| Usage-test | `artifacts/document-review/findings-usage-test.md` |
-| Cleanup | `artifacts/document-review/cleanup-report.md` |
-| Create-prs | `artifacts/document-review/pr-log.md` |
+| Review | `artifacts/findings-review.md` |
+| Verify | `artifacts/findings-verify.md` |
+| Install-test | `artifacts/findings-install-test.md` |
+| Install-test | `artifacts/cluster-changes.md` (change log) |
+| Usage-test | `artifacts/findings-usage-test.md` |
+| Cleanup | `artifacts/cleanup-report.md` |
+| Create-prs | `artifacts/pr-log.md` |
 
 Report and fix read from all findings files (whichever exist).
 
@@ -125,13 +125,13 @@ sub-agents:
 
 3. **Spawn Agent calls simultaneously:**
    - Agent (review): Read `.claude/skills/review/SKILL.md` and execute it.
-     Write output to `artifacts/document-review/findings-review.md`.
+     Write output to `artifacts/findings-review.md`.
    - Agent (verify): Read `.claude/skills/verify/SKILL.md` and execute it.
-     Write output to `artifacts/document-review/findings-verify.md`.
+     Write output to `artifacts/findings-verify.md`.
    - Agent (install-test): **Include this agent when `$CLUSTER_URL` and
      `$CLUSTER_TOKEN` are both set.** Read
      `.claude/skills/install-test/SKILL.md` and execute it. Write output to
-     `artifacts/document-review/findings-install-test.md`. The skill itself
+     `artifacts/findings-install-test.md`. The skill itself
      handles the case where no installation docs exist (writes a skip file),
      so do not pre-filter based on document content.
 4. **Wait** for all agents to complete
@@ -155,19 +155,19 @@ usage-test agent before cleanup.
 
 ### How to Run Usage Test
 
-1. **Read** `artifacts/document-review/findings-install-test.md`. Check the
+1. **Read** `artifacts/findings-install-test.md`. Check the
    status — if it says `**Status:** Skipped` or shows critical installation
    failures, skip usage-test.
 2. **Announce** to the user: "Running usage-test to verify documented
    interactions against the live installation."
 3. **Spawn a usage-test Agent:** Give it these instructions:
    - Read `.claude/skills/usage-test/SKILL.md` and follow it.
-   - Read `artifacts/document-review/inventory.md`.
-   - Read `artifacts/document-review/findings-install-test.md`.
+   - Read `artifacts/inventory.md`.
+   - Read `artifacts/findings-install-test.md`.
    - Execute documented usage interactions on the cluster.
-   - Write findings to `artifacts/document-review/findings-usage-test.md`.
+   - Write findings to `artifacts/findings-usage-test.md`.
    - Append any cluster changes to
-     `artifacts/document-review/cluster-changes.md`.
+     `artifacts/cluster-changes.md`.
 4. **Report the result** to the user — how many interactions were tested and
    how many passed/failed.
 
@@ -186,16 +186,16 @@ install-test and usage-test.
 
 ### How to Run Cleanup
 
-1. **Check** that `artifacts/document-review/cluster-changes.md` exists. If it
+1. **Check** that `artifacts/cluster-changes.md` exists. If it
    does not exist (install-test was skipped or produced no changes), skip
    cleanup.
 2. **Announce** to the user: "Running cluster cleanup to revert changes made
    during install-test and usage-test."
 3. **Spawn a cleanup Agent:** Give it these instructions:
    - Read `.claude/skills/cleanup/SKILL.md` and follow it.
-   - Read `artifacts/document-review/cluster-changes.md`.
+   - Read `artifacts/cluster-changes.md`.
    - Revert all changes and write the report to
-     `artifacts/document-review/cleanup-report.md`.
+     `artifacts/cleanup-report.md`.
 4. **Report the result** to the user:
    - If all changes reverted successfully, confirm the cluster is clean.
    - If any reverts failed, list what requires manual cleanup.
@@ -216,10 +216,10 @@ evidence before the findings flow into report and fix.
 
 1. **Spawn a validation Agent:** Give it these instructions:
    - Read `.claude/skills/validate/SKILL.md` and follow it.
-   - Read `artifacts/document-review/inventory.md`.
-   - Read whichever findings files exist (`findings-review.md`,
-     `findings-verify.md`, `findings-install-test.md`,
-     `findings-usage-test.md`).
+   - Read `artifacts/inventory.md`.
+   - Read whichever findings files exist (`artifacts/findings-review.md`,
+     `artifacts/findings-verify.md`, `artifacts/findings-install-test.md`,
+     `artifacts/findings-usage-test.md`).
    - Return the validation result.
 2. **Check the result:**
    - If all checked files **PASS** → proceed to next step.
@@ -248,7 +248,7 @@ When validation fails for a findings file:
 ```text
 Read .claude/skills/review/SKILL.md and execute it.
 
-IMPORTANT: A previous run produced artifacts/document-review/findings-review.md
+IMPORTANT: A previous run produced artifacts/findings-review.md
 but validation found these issues:
 
 - Coverage gap: Documents not reviewed: `docs/api.md`, `docs/config.md`
@@ -256,7 +256,7 @@ but validation found these issues:
 - Weak evidence: Finding 2 in `CONTRIBUTING.md` has no direct quote
 
 Read your previous output, fix these specific issues, and write the corrected
-findings to artifacts/document-review/findings-review.md.
+findings to artifacts/findings-review.md.
 ```
 
 ### When to Skip Validation

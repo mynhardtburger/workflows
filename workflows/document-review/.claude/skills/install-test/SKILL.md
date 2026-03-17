@@ -21,7 +21,7 @@ their solutions. The troubleshooting guide you produce is a primary input for
 ## Critical Rules
 
 - **Read the inventory first.** This phase requires `/scan` to have been run.
-  If `artifacts/document-review/inventory.md` does not exist, inform the user
+  If `artifacts/inventory.md` does not exist, inform the user
   and recommend running `/scan` first.
 - **Use the cluster, not localhost.** All execution happens on the cluster
   identified by `$CLUSTER_URL` and `$CLUSTER_TOKEN`. Never run installation
@@ -37,7 +37,7 @@ their solutions. The troubleshooting guide you produce is a primary input for
   source code, Makefile targets, or other authoritative sources in the repo.
 - **Log every cluster change.** Every command that creates, modifies, or deletes
   a cluster resource must be recorded in the change log at
-  `artifacts/document-review/cluster-changes.md`. This includes changes made
+  `artifacts/cluster-changes.md`. This includes changes made
   during troubleshooting. The cleanup agent depends on this log to revert all
   changes.
 
@@ -63,7 +63,7 @@ their solutions. The troubleshooting guide you produce is a primary input for
    ```
 
 If the phase cannot proceed for any reason, write a minimal findings file to
-`artifacts/document-review/findings-install-test.md` noting the skip reason so
+`artifacts/findings-install-test.md` noting the skip reason so
 the final report can include it. Use this format:
 
 ```markdown
@@ -91,7 +91,7 @@ Specific skip conditions:
 ## Change Logging
 
 **Before executing any command that modifies the cluster**, initialize the
-change log at `artifacts/document-review/cluster-changes.md` using the template
+change log at `artifacts/cluster-changes.md` using the template
 at `templates/cluster-changes.md`.
 
 Every cluster modification must be logged immediately after execution — do not
@@ -140,7 +140,7 @@ a note: `Effects may be incomplete — manual review recommended`.
 
 ### Step 1: Load Context
 
-Read `artifacts/document-review/inventory.md`. Identify documents that contain
+Read `artifacts/inventory.md`. Identify documents that contain
 installation instructions — look for docs tagged with "Has Instructions: Yes"
 and topics related to installation, setup, deployment, quickstart, or getting
 started.
@@ -236,7 +236,7 @@ For each issue found, classify it:
 ### Step 6: Write Findings
 
 Follow the template at `templates/findings-install-test.md` exactly. Write to
-`artifacts/document-review/findings-install-test.md`.
+`artifacts/findings-install-test.md`.
 
 The **Troubleshooting Guide** section is critical — `/fix` uses it to add
 error-handling guidance to the documentation. For every error encountered during
@@ -250,5 +250,5 @@ execution, record:
 
 ## Output
 
-- `artifacts/document-review/findings-install-test.md`
-- `artifacts/document-review/cluster-changes.md`
+- `artifacts/findings-install-test.md`
+- `artifacts/cluster-changes.md`

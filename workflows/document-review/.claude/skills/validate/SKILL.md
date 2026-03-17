@@ -14,17 +14,17 @@ quality of the documentation itself — you evaluate the quality of the
 
 You will be given:
 
-- The inventory file: `artifacts/document-review/inventory.md`
+- The inventory file: `artifacts/inventory.md`
 - One or more findings files to validate:
-  - `artifacts/document-review/findings-review.md`
-  - `artifacts/document-review/findings-verify.md`
-  - `artifacts/document-review/findings-usage-test.md`
+  - `artifacts/findings-review.md`
+  - `artifacts/findings-verify.md`
+  - `artifacts/findings-usage-test.md`
 
 Read all files that exist before starting validation.
 
 ## Checks
 
-### For findings-review.md
+### For artifacts/findings-review.md
 
 Run these checks in order. Record every failure.
 
@@ -68,7 +68,7 @@ Run these checks in order. Record every failure.
 - At least one finding per reviewed document should include a direct quote
   (unless the document genuinely has no issues).
 
-### For findings-install-test.md
+### For artifacts/findings-install-test.md
 
 **1. Coverage — Were installation docs actually tested?**
 
@@ -105,7 +105,7 @@ Run these checks in order. Record every failure.
   **Prevention** fields.
 - Solutions must contain actual commands or steps, not vague advice.
 
-### For findings-usage-test.md
+### For artifacts/findings-usage-test.md
 
 **1. Coverage — Were usage docs actually tested?**
 
@@ -149,7 +149,7 @@ Run these checks in order. Record every failure.
   **Prevention** fields.
 - Solutions must contain actual commands or steps, not vague advice.
 
-### For findings-verify.md
+### For artifacts/findings-verify.md
 
 **1. Coverage — Were verifiable claims actually checked?**
 
@@ -188,7 +188,7 @@ Return your validation result in exactly this format:
 ```
 ## Validation Result
 
-### findings-review.md: PASS | FAIL
+### artifacts/findings-review.md: PASS | FAIL
 
 [If FAIL, list each failure:]
 
@@ -197,7 +197,7 @@ Return your validation result in exactly this format:
 - **Missing field**: Finding 3 in `README.md` is missing **Evidence**
 - **Weak evidence**: Finding 2 in `CONTRIBUTING.md` has no direct quote
 
-### findings-install-test.md: PASS | FAIL
+### artifacts/findings-install-test.md: PASS | FAIL
 
 [If FAIL, list each failure:]
 
@@ -205,7 +205,7 @@ Return your validation result in exactly this format:
 - **Missing field**: Step 2 in `INSTALL.md` is missing **Actual result**
 - **Missing troubleshooting**: Steps failed but no Troubleshooting Guide
 
-### findings-usage-test.md: PASS | FAIL
+### artifacts/findings-usage-test.md: PASS | FAIL
 
 [If FAIL, list each failure:]
 
@@ -214,7 +214,7 @@ Return your validation result in exactly this format:
 - **Missing troubleshooting**: Interactions failed but no Troubleshooting Guide
 - **Missing user journey**: No User Journey Assessment section
 
-### findings-verify.md: PASS | FAIL
+### artifacts/findings-verify.md: PASS | FAIL
 
 [If FAIL, list each failure:]
 

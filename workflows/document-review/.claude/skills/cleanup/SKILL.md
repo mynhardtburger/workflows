@@ -32,7 +32,7 @@ user knows what manual cleanup remains.
 
 ## Inputs
 
-- `artifacts/document-review/cluster-changes.md` — the change log produced by
+- `artifacts/cluster-changes.md` — the change log produced by
   install-test
 
 If this file does not exist or is empty, report that no changes were logged and
@@ -54,7 +54,7 @@ reverted.
 
 ### Step 1: Read the Change Log
 
-Read `artifacts/document-review/cluster-changes.md`. Parse all change entries
+Read `artifacts/cluster-changes.md`. Parse all change entries
 and build a list of revert operations.
 
 ### Step 2: Build Revert Plan
@@ -123,8 +123,8 @@ For each revert operation (in reverse order):
 ### Step 4: Write the Cleanup Report
 
 Follow the template at `templates/cleanup-report.md` exactly. Write to
-`artifacts/document-review/cleanup-report.md`.
+`artifacts/cleanup-report.md`.
 
 ## Output
 
-- `artifacts/document-review/cleanup-report.md`
+- `artifacts/cleanup-report.md`

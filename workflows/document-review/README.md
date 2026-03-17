@@ -149,20 +149,20 @@ Creates draft GitHub pull requests from automatable fix suggestions. Only fixes 
 
 ## Output Artifacts
 
-All artifacts are written to `artifacts/document-review/`:
+Output files are written to `artifacts/`:
 
 | File | Content |
 |------|---------|
-| `inventory.md` | Documentation file catalog |
-| `findings-review.md` | Detailed findings by document |
-| `findings-verify.md` | Code verification findings |
-| `findings-install-test.md` | Installation test findings and troubleshooting guide |
-| `findings-usage-test.md` | Usage test findings and troubleshooting guide |
-| `cluster-changes.md` | Log of all cluster modifications for cleanup |
-| `cleanup-report.md` | Cleanup results and any failed reverts |
-| `report.md` | Consolidated findings report |
-| `fixes.md` | Inline fix suggestions with PR grouping |
-| `pr-log.md` | Created PR links and status |
+| `artifacts/inventory.md` | Documentation file catalog |
+| `artifacts/findings-review.md` | Detailed findings by document |
+| `artifacts/findings-verify.md` | Code verification findings |
+| `artifacts/findings-install-test.md` | Installation test findings and troubleshooting guide |
+| `artifacts/findings-usage-test.md` | Usage test findings and troubleshooting guide |
+| `artifacts/cluster-changes.md` | Log of all cluster modifications for cleanup |
+| `artifacts/cleanup-report.md` | Cleanup results and any failed reverts |
+| `artifacts/report.md` | Consolidated findings report |
+| `artifacts/fixes.md` | Inline fix suggestions with PR grouping |
+| `artifacts/pr-log.md` | Created PR links and status |
 
 ## Prerequisites
 

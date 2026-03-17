@@ -22,16 +22,16 @@ documentation accurately describe how to use it?"
 
 - **Install-test must have succeeded.** This phase requires a working
   installation on the cluster. If
-  `artifacts/document-review/findings-install-test.md` does not exist or shows
+  `artifacts/findings-install-test.md` does not exist or shows
   the install was skipped or failed, write a skip file and stop.
-- **Read the inventory first.** If `artifacts/document-review/inventory.md`
+- **Read the inventory first.** If `artifacts/inventory.md`
   does not exist, inform the user and recommend running `/scan` first.
 - **Use the cluster, not localhost.** All interactions happen on the cluster
   identified by `$CLUSTER_URL` and `$CLUSTER_TOKEN`.
 - **Read-only on the local filesystem.** Do not modify project files. You may
   create temporary files in `/tmp` if needed.
 - **Log every cluster change.** Append to the existing change log at
-  `artifacts/document-review/cluster-changes.md`. The cleanup agent will
+  `artifacts/cluster-changes.md`. The cleanup agent will
   revert these along with install-test changes.
 - **Don't guess expected behavior.** Compare only against what the
   documentation explicitly states. If behavior is undocumented, record it as
@@ -55,7 +55,7 @@ oc login --token="$CLUSTER_TOKEN" --server="$CLUSTER_URL"
 ```
 
 If the phase cannot proceed, write a skip file to
-`artifacts/document-review/findings-usage-test.md`:
+`artifacts/findings-usage-test.md`:
 
 ```markdown
 # Usage Test Findings
@@ -74,7 +74,7 @@ Then stop. Do not proceed with interaction steps.
 
 Specific skip conditions:
 
-- `artifacts/document-review/findings-install-test.md` does not exist, shows
+- `artifacts/findings-install-test.md` does not exist, shows
   `**Status:** Skipped`, or shows critical installation failures — the phase
   cannot proceed without a working installation.
 - `oc login` fails — record the error message as the reason.
@@ -117,7 +117,7 @@ and setup documentation (already covered by install-test).
 ## Change Logging
 
 Append to the **existing** change log at
-`artifacts/document-review/cluster-changes.md`. Do not overwrite it — it
+`artifacts/cluster-changes.md`. Do not overwrite it — it
 already contains install-test changes. Follow the same format:
 
 - **Action**: What was done
@@ -135,8 +135,8 @@ usage testing.
 
 Read these files:
 
-- `artifacts/document-review/inventory.md` — identify usage documentation
-- `artifacts/document-review/findings-install-test.md` — confirm install
+- `artifacts/inventory.md` — identify usage documentation
+- `artifacts/findings-install-test.md` — confirm install
   succeeded and understand what was installed
 
 Check the install-test findings status. If the status is "Skipped" or shows
@@ -227,9 +227,9 @@ Classify each finding:
 ### Step 7: Write Findings
 
 Follow the template at `templates/findings-usage-test.md` exactly. Write to
-`artifacts/document-review/findings-usage-test.md`.
+`artifacts/findings-usage-test.md`.
 
 ## Output
 
-- `artifacts/document-review/findings-usage-test.md`
-- Appended entries in `artifacts/document-review/cluster-changes.md`
+- `artifacts/findings-usage-test.md`
+- Appended entries in `artifacts/cluster-changes.md`
