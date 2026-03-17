@@ -258,13 +258,14 @@ issues:
 
 Append the `## Cross-Document Issues` section to the findings file.
 
-### Step 5: Update Summary Tables
+### Step 5: Update Summary Table
 
-Read the findings file you have built. Count the totals by severity and by
-dimension. Update the summary tables at the top of
+Read the findings file you have built. Count findings for each
+dimension × severity cell. Update the summary table at the top of
 `artifacts/document-review/findings-review.md` with the actual counts,
-replacing the placeholder `N` values. Update the `Documents reviewed: N of M`
-line with the actual count.
+replacing the placeholder `N` values. Include row totals (per dimension) and
+column totals (per severity). Update the `Documents reviewed: N of M` line
+with the actual count.
 
 ## Output
 

@@ -6,23 +6,16 @@
 
 ## Summary
 
-| Severity | Count |
-|----------|-------|
-| Critical | N |
-| High | N |
-| Medium | N |
-| Low | N |
-| **Total** | **N** |
-
-| Dimension | Issues |
-|-----------|--------|
-| Accuracy | N |
-| Completeness | N |
-| Consistency | N |
-| Clarity | N |
-| Currency | N |
-| Structure | N |
-| Examples | N |
+| Dimension | Critical | High | Medium | Low | Total |
+|-----------|----------|------|--------|-----|-------|
+| Accuracy | N | N | N | N | N |
+| Completeness | N | N | N | N | N |
+| Consistency | N | N | N | N | N |
+| Clarity | N | N | N | N | N |
+| Currency | N | N | N | N | N |
+| Structure | N | N | N | N | N |
+| Examples | N | N | N | N | N |
+| **Total** | **N** | **N** | **N** | **N** | **N** |
 
 ## Findings by Document
 

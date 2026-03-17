@@ -45,11 +45,13 @@ Run these checks in order. Record every failure.
   equal the total documents in the inventory (unless a scoped review was
   requested).
 
-**3. Summary tables — Are statistics present and consistent?**
+**3. Summary table — Are statistics present and consistent?**
 
-- The severity summary table must exist with actual counts (not `N`).
-- The dimension summary table must exist with actual counts.
-- The total in the severity table should equal the sum of individual counts.
+- The dimension × severity cross-tabulation table must exist with actual counts
+  (not `N`).
+- Row totals must equal the sum of that dimension's severity counts.
+- Column totals must equal the sum of that severity's dimension counts.
+- The grand total must equal the sum of all row totals (and all column totals).
 
 **4. Finding structure — Does each finding have required fields?**
 

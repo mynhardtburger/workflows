@@ -43,17 +43,15 @@ Also read `artifacts/document-review/inventory.md` for context.
 
 ### Step 2: Compute Statistics
 
-Calculate:
-
-- Total findings by severity (Critical, High, Medium, Low) across all findings
-  files
-- Total findings by dimension (Accuracy, Completeness, Consistency, Clarity,
-  Currency, Structure, Examples)
-- Findings per document (which docs have the most issues)
+Build a dimension × severity cross-tabulation: for each of the 7 dimensions
+(Accuracy, Completeness, Consistency, Clarity, Currency, Structure, Examples),
+count the findings at each severity level (Critical, High, Medium, Low) across
+all findings files. Include row and column totals. Also compute findings per
+document (which docs have the most issues).
 
 ### Step 3: Assess Overall Health
 
-Provide a qualitative assessment for each dimension:
+For each dimension row in the summary table, provide a qualitative rating:
 
 - **Good** — Few or no issues, docs are solid in this area
 - **Fair** — Some issues but generally acceptable
