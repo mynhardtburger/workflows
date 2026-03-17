@@ -8,7 +8,7 @@ Systematic documentation review through these phases:
 4. **Install-test** (`/install-test`) — *(Optional)* Execute installation instructions on a cluster
 5. **Usage-test** (`/usage-test`) — *(Optional)* Interact with the installed project and verify usage docs
 6. **Cleanup** (`/cleanup`) — Revert cluster changes from install-test and usage-test (runs automatically)
-7. **Report** (`/report`) — Generate prioritized findings summary
+7. **Report** (`/report`) — Consolidate all findings into a single deduplicated report
 8. **Fix** (`/fix`) — *(Optional)* Generate inline fix suggestions
 9. **Create PRs** (`/create-prs`) — *(Optional)* Create GitHub pull requests from fix suggestions
 10. **Speedrun** (`/speedrun`) — Run scan → review → report in one shot

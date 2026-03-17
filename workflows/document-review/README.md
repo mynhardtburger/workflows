@@ -28,7 +28,7 @@ workflows/document-review/
 │   │   ├── scan.md               # Discover and catalog docs
 │   │   ├── review.md             # Quality review
 │   │   ├── verify.md             # Code cross-referencing
-│   │   ├── report.md             # Summary report
+│   │   ├── report.md             # Consolidated report
 │   │   ├── fix.md                # Fix suggestions
 │   │   ├── create-prs.md         # PR creation
 │   │   ├── install-test.md       # Installation testing
@@ -72,7 +72,7 @@ workflows/document-review/
 | `/install-test` | Execute installation instructions on a cluster (optional) |
 | `/usage-test` | Interact with the installed project and verify usage docs (optional) |
 | `/cleanup` | Revert cluster changes from install-test and usage-test (runs automatically) |
-| `/report` | Generate prioritized findings summary |
+| `/report` | Consolidate all findings into a deduplicated report |
 | `/fix` | Generate inline fix suggestions (optional) |
 | `/create-prs` | Create GitHub pull requests from fix suggestions (optional) |
 | `/speedrun` | Run scan → review + verify + install-test → usage-test → cleanup → report in one shot |
@@ -116,7 +116,7 @@ Runs automatically after usage-test and install-test complete. Reads the cluster
 
 ### 8. Report
 
-Generates a prioritized executive summary with overall health ratings per dimension, top issues, per-document breakdown, and recommended fix priority. Reads from whichever findings files exist.
+Consolidates all findings from review, verify, install-test, and usage-test into a single deduplicated report. Findings are grouped by severity (Critical → Low) with a dimension × severity summary table. Reads from whichever findings files exist.
 
 ### 9. Fix (Optional)
 
@@ -160,7 +160,7 @@ All artifacts are written to `artifacts/document-review/`:
 | `findings-usage-test.md` | Usage test findings and troubleshooting guide |
 | `cluster-changes.md` | Log of all cluster modifications for cleanup |
 | `cleanup-report.md` | Cleanup results and any failed reverts |
-| `report.md` | Executive summary |
+| `report.md` | Consolidated findings report |
 | `fixes.md` | Inline fix suggestions with PR grouping |
 | `pr-log.md` | Created PR links and status |
 
@@ -217,6 +217,6 @@ encounter edge cases with fine-grained PAT scoping.
 4. Optionally run `/verify` to check docs against code
 5. Optionally run `/install-test` to execute installation steps on a cluster
 6. Usage-test runs automatically after a successful install-test
-7. Run `/report` for a prioritized summary
+7. Run `/report` to consolidate all findings
 8. Optionally run `/fix` for concrete fix suggestions
 9. Optionally run `/create-prs` to submit fixes as GitHub pull requests

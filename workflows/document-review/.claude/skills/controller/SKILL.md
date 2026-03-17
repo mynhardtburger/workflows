@@ -40,7 +40,8 @@ workflow by executing phases and handling transitions between them.
    that could not be reverted.
 
 7. **Report** (`/report`) — `.claude/skills/report/SKILL.md`
-   Generate a clean, prioritized executive summary from current findings.
+   Consolidate all findings into a single deduplicated report grouped by
+   severity.
 
 8. **Fix** (`/fix`) — `.claude/skills/fix/SKILL.md`
    Generate inline fix suggestions for each finding.
@@ -292,7 +293,7 @@ make sense:
 
 **After review (and validation):**
 
-- Recommend `/report` to get a summary of findings
+- Recommend `/report` to consolidate all findings
 - Offer `/verify` for deeper accuracy checking against code
 
 **After verify (and validation):**

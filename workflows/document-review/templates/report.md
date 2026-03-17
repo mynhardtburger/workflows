@@ -6,7 +6,7 @@
 
 ---
 
-## Findings Summary
+## Summary
 
 | Dimension | Critical | High | Medium | Low | Total | Rating |
 |-----------|----------|------|--------|-----|-------|--------|
@@ -19,30 +19,45 @@
 | Examples | N | N | N | N | N | Good/Fair/Poor |
 | **Total** | **N** | **N** | **N** | **N** | **N** | |
 
-## Top Issues
+## Critical
 
-### 1. [Most critical issue]
+### C1. [title]
 
-**Severity:** Critical | **Dimension:** Accuracy
-**Location:** [file:section]
-[Brief description and why it matters]
+- **Dimension:** Accuracy
+- **Location:** [file:section]
+- **Source:** review | verify | install-test | usage-test
+- **Description:** [what is wrong]
+- **Evidence:** [quoted text or output]
 
-### 2. [Second most critical]
+### C2. [title]
 
 ...
 
-## Documents Needing Attention
+## High
 
-| Document | Critical | High | Other | Total |
-|----------|----------|------|-------|-------|
-| [most issues first] | N | N | N | N |
-| ... | ... | ... | ... | ... |
+### H1. [title]
 
-## Recommended Fix Priority
+- **Dimension:** Completeness
+- **Location:** [file:section]
+- **Source:** review | verify | install-test | usage-test
+- **Description:** [what is wrong]
+- **Evidence:** [quoted text or output]
 
-1. **[Category]** — [Why this should be fixed first]
-2. **[Category]** — [Why this is next]
-3. ...
+### H2. [title]
+
+...
+
+## Medium
+
+### M1. [title]
+
+...
+
+## Low
+
+### L1. [title]
+
+...
 
 ## Phases Not Run
 
@@ -57,9 +72,3 @@ phases were executed.]
 - Run `/fix` to generate inline fix suggestions
 - Run `/verify` for deeper code cross-referencing (if not already done)
 - Run `/install-test` to test installation instructions on a cluster (if not already done)
-
----
-
-*Review findings: artifacts/document-review/findings-review.md*
-*Verification findings: artifacts/document-review/findings-verify.md*
-*Document inventory: artifacts/document-review/inventory.md*
