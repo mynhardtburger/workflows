@@ -133,11 +133,11 @@ Without doing a deep review, flag obvious gaps:
 ### Step 6: Write the Inventory
 
 Follow the template at `templates/inventory.md` exactly. Write the inventory to
-`artifacts/document-review/inventory.md`.
+`artifacts/inventory.md`.
 
 ## Output
 
-- `artifacts/document-review/inventory.md`
+- `artifacts/inventory.md`
 
 ## When This Phase Is Done
 

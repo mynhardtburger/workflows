@@ -22,7 +22,7 @@ retrying once on failure.
 The workflow controller lives at `.claude/skills/controller/SKILL.md`.
 It defines how to execute phases, recommend next steps, and handle transitions.
 Phase skills are at `.claude/skills/{name}/SKILL.md`.
-Artifacts go in `artifacts/document-review/`.
+Output files are written to `artifacts/`.
 
 ## Quality Dimensions
 

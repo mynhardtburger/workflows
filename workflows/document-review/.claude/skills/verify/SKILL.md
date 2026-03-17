@@ -18,7 +18,7 @@ discrepancies as findings and flag undocumented features.
 ## Critical Rules
 
 - **Read the inventory first.** This phase requires `/scan` to have been run.
-  If `artifacts/document-review/inventory.md` does not exist, inform the user
+  If `artifacts/inventory.md` does not exist, inform the user
   and recommend running `/scan` first.
 - **Read, don't run.** This is static analysis. You read source code to verify
   claims — you don't execute it.
@@ -66,7 +66,7 @@ Focus on documentation claims that can be checked against source code:
 
 ### Step 1: Load Context
 
-Read the inventory (`artifacts/document-review/inventory.md`).
+Read the inventory (`artifacts/inventory.md`).
 
 ### Step 2: Identify Verifiable Claims
 
@@ -106,7 +106,7 @@ For each verifiable claim:
 ### Step 5: Record Findings
 
 Follow the template at `templates/findings-verify.md` exactly. Write findings to
-`artifacts/document-review/findings-verify.md`.
+`artifacts/findings-verify.md`.
 
 Each verification finding should include:
 
@@ -119,4 +119,4 @@ Each verification finding should include:
 
 ## Output
 
-- `artifacts/document-review/findings-verify.md`
+- `artifacts/findings-verify.md`
