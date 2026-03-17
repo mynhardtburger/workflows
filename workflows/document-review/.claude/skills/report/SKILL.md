@@ -1,19 +1,20 @@
 ---
 name: report
-description: Generate a prioritized executive summary from findings.
+description: Consolidate all findings into a single deduplicated report grouped by severity.
 ---
 
 # Report Skill
 
-You are generating a clean, prioritized summary report from documentation
-review findings. This report is the primary deliverable of the workflow — it
-should be actionable and easy to scan.
+You are consolidating all documentation review findings into a single
+authoritative report. This report is the primary deliverable of the workflow —
+it contains every finding, deduplicated and grouped by severity.
 
 ## Your Role
 
-Read the findings file, synthesize the results, and produce a report that helps
-the user understand the overall documentation health and prioritize what to fix
-first.
+Read all findings files, merge them into one consolidated list, remove
+duplicates, and produce a report grouped by severity (Critical → High → Medium
+→ Low). Every finding from every phase must appear in the report unless it
+duplicates another.
 
 ## Critical Rules
 
@@ -21,12 +22,15 @@ first.
   `artifacts/document-review/findings-review.md` nor
   `artifacts/document-review/findings-verify.md` exists, inform the user and
   recommend running `/review` first.
-- **Be concise.** The report is a summary, not a copy of the findings. Link to
-  findings for details.
-- **Prioritize actionably.** Order recommendations by impact, not just severity
-  count.
-- **Include statistics.** Quantify the findings so the user can gauge the
-  overall health.
+- **Include every finding.** This is not a summary — it is the consolidated
+  record. Every finding from every phase must appear unless it is a duplicate.
+- **Deduplicate across phases.** The same issue may be reported by review,
+  verify, and install-test. Merge these into a single finding, noting which
+  phases detected it in the **Source** field.
+- **Group by severity.** Findings are organized under `## Critical`,
+  `## High`, `## Medium`, and `## Low` headings, in that order.
+- **Number findings within each group.** Use a severity prefix: C1, C2, …
+  for Critical; H1, H2, … for High; M1, M2, … for Medium; L1, L2, … for Low.
 
 ## Process
 
@@ -41,41 +45,34 @@ Read whichever findings files exist:
 
 Also read `artifacts/document-review/inventory.md` for context.
 
-### Step 2: Compute Statistics
+### Step 2: Merge and Deduplicate
 
-Build a dimension × severity cross-tabulation: for each of the 7 dimensions
-(Accuracy, Completeness, Consistency, Clarity, Currency, Structure, Examples),
-count the findings at each severity level (Critical, High, Medium, Low) across
-all findings files. Include row and column totals. Also compute findings per
-document (which docs have the most issues).
+Collect every finding from all files into a single list. For each finding,
+record its severity, dimension, location, description, evidence, and which
+phase produced it (review, verify, install-test, usage-test).
 
-### Step 3: Assess Overall Health
+Identify duplicates — findings that describe the same issue in the same
+location. When two or more phases report the same issue:
 
-For each dimension row in the summary table, provide a qualitative rating:
+- Keep the version with the strongest evidence (e.g., install-test confirming
+  a broken command trumps review suspecting it)
+- Use the highest severity if they differ
+- Merge the **Source** field to list all phases that detected it
 
-- **Good** — Few or no issues, docs are solid in this area
+### Step 3: Compute Statistics
+
+Build a dimension × severity cross-tabulation from the deduplicated list: for
+each of the 7 dimensions (Accuracy, Completeness, Consistency, Clarity,
+Currency, Structure, Examples), count findings at each severity level (Critical,
+High, Medium, Low). Include row and column totals.
+
+For each dimension, assign a qualitative rating:
+
+- **Good** — Few or no issues
 - **Fair** — Some issues but generally acceptable
 - **Poor** — Significant issues that need attention
 
-### Step 4: Identify Top Issues
-
-Select the highest-impact findings to highlight:
-
-- All Critical findings (factually wrong information, broken commands)
-- All High findings (significant gaps, contradictions, outdated content)
-- Patterns (e.g., "all CLI flag docs are outdated" rather than listing each
-  one)
-
-### Step 5: Recommend Fix Priority
-
-Suggest an order for addressing issues:
-
-1. Critical first (factually wrong content, broken commands cause the most harm)
-2. High next (missing docs, contradictions, outdated content)
-3. Medium (confusing but has workarounds)
-4. Low (nice to have improvements)
-
-### Step 6: Note Skipped Phases
+### Step 4: Note Skipped Phases
 
 Check whether optional phases were skipped and note the reason in the report:
 
@@ -94,10 +91,22 @@ Check whether optional phases were skipped and note the reason in the report:
 
 This helps readers understand the scope of the review.
 
-### Step 7: Write the Report
+### Step 5: Write the Report
 
 Follow the template at `templates/report.md` exactly. Write to
 `artifacts/document-review/report.md`.
+
+Write every finding under its severity heading. Each finding must include:
+
+- **Dimension** — which quality dimension is affected
+- **Location** — file path and section/line
+- **Source** — which phase(s) detected it (review, verify, install-test,
+  usage-test)
+- **Description** — what the issue is
+- **Evidence** — quoted text, code snippet, or command output
+
+Omit any severity section that has zero findings (e.g., if there are no
+Critical findings, omit the `## Critical` section entirely).
 
 ## Output
 
@@ -105,11 +114,11 @@ Follow the template at `templates/report.md` exactly. Write to
 
 ## When This Phase Is Done
 
-Report your findings:
+Report to the user:
 
-- Overall documentation health (one-line summary)
-- Number of issues by severity
-- The top 3 most critical issues
+- Total findings (after deduplication)
+- Breakdown by severity
+- The top 3 most impactful findings
 - Recommended next step
 
 Then **re-read the controller** (`.claude/skills/controller/SKILL.md`) for
