@@ -5,26 +5,18 @@
 **Documents reviewed:** N of M
 **Total findings:** N
 
-## Overall Health
-
-| Dimension | Rating | Issues |
-|-----------|--------|--------|
-| Accuracy | Good/Fair/Poor | N |
-| Completeness | Good/Fair/Poor | N |
-| Consistency | Good/Fair/Poor | N |
-| Clarity | Good/Fair/Poor | N |
-| Currency | Good/Fair/Poor | N |
-| Structure | Good/Fair/Poor | N |
-| Examples | Good/Fair/Poor | N |
-
 ## Findings Summary
 
-| Severity | Count |
-|----------|-------|
-| Critical | N |
-| High | N |
-| Medium | N |
-| Low | N |
+| Dimension | Critical | High | Medium | Low | Total | Rating |
+|-----------|----------|------|--------|-----|-------|--------|
+| Accuracy | N | N | N | N | N | Good/Fair/Poor |
+| Completeness | N | N | N | N | N | Good/Fair/Poor |
+| Consistency | N | N | N | N | N | Good/Fair/Poor |
+| Clarity | N | N | N | N | N | Good/Fair/Poor |
+| Currency | N | N | N | N | N | Good/Fair/Poor |
+| Structure | N | N | N | N | N | Good/Fair/Poor |
+| Examples | N | N | N | N | N | Good/Fair/Poor |
+| **Total** | **N** | **N** | **N** | **N** | **N** | |
 
 ## Top Issues
 
