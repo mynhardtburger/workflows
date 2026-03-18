@@ -51,9 +51,8 @@ workflow by executing phases and handling transitions between them.
    Non-automatable fixes are skipped.
 
 10. **Speedrun** (`/speedrun`)
-   Run scan → review + verify + install-test (parallel) → usage-test →
-   cleanup → validate → report automatically, pausing only for critical
-   decisions.
+   Run scan → review + verify (parallel) → validate → report automatically,
+   pausing only for critical decisions.
 
 Phases can be skipped or reordered at the user's discretion.
 
@@ -375,7 +374,7 @@ Recommended next step: /review — deep quality analysis of the 42 documents fou
 
 Other options:
 - /verify — cross-reference docs against source code (can run in parallel with review)
-- /speedrun — run the full scan → review + verify → report pipeline automatically
+- /speedrun — run scan → review + verify → report automatically
 ```
 
 ## Executing a Speedrun
@@ -383,21 +382,12 @@ Other options:
 When the user invokes `/speedrun`:
 
 1. Execute the **scan** phase — announce it, read the skill, run it
-2. **Check whether cluster credentials are set** (see
-   "Running Analysis Sub-Agents in Parallel" above for the check command).
-   Launch **review**, **verify**, and — if both env vars are set —
-   **install-test** as parallel sub-agents. Only skip install-test when
-   the env vars are missing; do not skip based on scan results (the
-   install-test skill handles the "no installation docs" case itself).
-3. **Run usage-test** if install-test was dispatched and succeeded (see
-   "Usage Test" above)
-4. **Run cluster cleanup** if install-test was dispatched (see "Cluster
-   Cleanup" above)
-5. **Run validation** — retry any failing sub-agents (max 1 retry)
-6. Once validation passes (or retries are exhausted), execute the **report**
+2. Launch **review** and **verify** as parallel sub-agents
+3. **Run validation** — retry any failing sub-agents (max 1 retry)
+4. Once validation passes (or retries are exhausted), execute the **report**
    phase
-7. Present the final report to the user
-8. Offer `/fix` as a follow-up option
+5. Present the final report to the user
+6. Offer `/fix` as a follow-up option
 
 During speedrun, only pause if:
 
