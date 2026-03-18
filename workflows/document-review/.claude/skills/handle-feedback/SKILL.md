@@ -89,14 +89,22 @@ a comment.
 
 ### Step 1: Fetch PR Data and Comments
 
-All GitHub data is fetched once in this step and saved to
+All GitHub data is fetched in this step and saved to
 `artifacts/tmp/feedback/`. Subsequent steps read only from disk — no
 duplicate API calls.
+
+**Always start fresh.** Delete any previous cached data before fetching so
+that re-runs within the same session pick up new PRs, comments, and
+reactions:
+
+```bash
+rm -rf artifacts/tmp/feedback
+mkdir -p artifacts/tmp/feedback
+```
 
 #### 1a. Get the bot's identity
 
 ```bash
-mkdir -p artifacts/tmp/feedback
 gh api user --jq '.login' > artifacts/tmp/feedback/bot-login.txt
 ```
 
