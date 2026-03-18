@@ -102,6 +102,15 @@ done
 
 These snapshots are used in Step 3 to detect duplicates before creating each PR.
 
+- Ensure the `acp:document-review` label exists in the repository:
+
+```bash
+gh label create "acp:document-review" --description "Created by the document-review workflow" --color "1D76DB" 2>/dev/null || true
+```
+
+If label creation fails for permission reasons, continue without the label
+and note it in the PR log.
+
 ### Step 3: Create Each Pull Request
 
 Process PR groups in severity order (highest-severity fixes first). For each
@@ -184,6 +193,7 @@ gh pr create --draft \
 *Created by document-review workflow `/create-prs` phase.*
 EOF
 )" \
+  --label "acp:document-review" \
   --base <base-branch> \
   --head docs/fix-<slug>
 ```
