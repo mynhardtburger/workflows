@@ -45,6 +45,8 @@ in the fixes file.
   then others.
 - **Clean working tree.** Do not start if the working tree has uncommitted
   changes. Inform the user and stop.
+- **Attribution required.** Every commit must use `-s` for Signed-off-by and
+  include a `Co-Authored-By` trailer with the current model name.
 
 ## Process
 
