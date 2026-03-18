@@ -125,8 +125,8 @@ one after another — do not stop between them to ask what to do next.
      `/scan`), execute them in order
    - If commands are independent (e.g., `/review` and `/verify`), run them in
      parallel as sub-agents — same as during speedrun
-   - Implicit dependencies still apply: `/install-test` triggers usage-test
-     and cleanup automatically, validation runs after findings phases
+   - When the user explicitly includes `/install-test`, it triggers usage-test
+     and cleanup automatically. Validation runs after findings phases
 4. **Report combined results** at the end, after all commands have completed
 5. **Then stop and wait** — recommend next steps as usual
 
@@ -158,12 +158,15 @@ sub-agents:
      Write output to `artifacts/findings-review.md`.
    - Agent (verify): Read `.claude/skills/verify/SKILL.md` and execute it.
      Write output to `artifacts/findings-verify.md`.
-   - Agent (install-test): **Include this agent when `$CLUSTER_URL`,
-     `$CLUSTER_USERNAME`, and `$CLUSTER_PASSWORD` are all set.** Read
-     `.claude/skills/install-test/SKILL.md` and execute it. Write output to
-     `artifacts/findings-install-test.md`. The skill itself
-     handles the case where no installation docs exist (writes a skip file),
-     so do not pre-filter based on document content.
+   - Agent (install-test): **Only include this agent when the user explicitly
+     requested it** (e.g., `/install-test`, or a multi-command prompt that
+     includes install-test). Cluster credentials (`$CLUSTER_URL`,
+     `$CLUSTER_USERNAME`, `$CLUSTER_PASSWORD`) must also be set. Never
+     auto-dispatch install-test just because credentials are available — the
+     user must ask for it. Read `.claude/skills/install-test/SKILL.md` and
+     execute it. Write output to `artifacts/findings-install-test.md`. The
+     skill itself handles the case where no installation docs exist (writes a
+     skip file), so do not pre-filter based on document content.
 4. **Wait** for all agents to complete
 5. **Run usage-test** if install-test was dispatched and succeeded (see
    "Usage Test" below)
@@ -411,10 +414,15 @@ invoked without an existing inventory, run `/scan` first and inform the user.
 - **Never auto-advance.** Always wait for the user between phases (except
   during speedrun or when the user provides multiple commands in a single
   prompt).
-- **Always run usage-test after successful install-test.** Before cleanup,
-  check whether install-test succeeded and dispatch usage-test if it did.
-- **Always clean up.** Run cleanup after every install-test (and usage-test)
-  execution before proceeding to validation or next steps.
+- **Cluster phases are opt-in only.** Never dispatch install-test, usage-test,
+  or cleanup unless the user explicitly requested them. These phases are time
+  consuming and involve live cluster actions — do not trigger them
+  automatically just because credentials are available.
+- **When install-test is requested, run the full chain.** After a successful
+  install-test, run usage-test, then cleanup, before proceeding to validation.
+- **Always clean up after cluster phases.** Run cleanup after every
+  install-test (and usage-test) execution before proceeding to validation or
+  next steps.
 - **Always validate.** Run validation after every review, verify,
   install-test, or usage-test execution, including retries. The only
   exception is if the user explicitly asks to skip.
