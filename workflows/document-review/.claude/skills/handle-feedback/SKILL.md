@@ -65,13 +65,15 @@ a comment.
   check the comment author. If the comment was authored by the same user
   identity that created the PR (i.e., the bot/agent account), skip it. This
   prevents self-conversation loops.
-- **Use reactions as state.** After processing a comment, react with an emoji
-  to mark it as handled. Skip comments that already have your reaction. This
-  makes the skill idempotent and safe to run multiple times.
-  - `👀` — acknowledged, evaluating (add immediately when starting to process)
-  - `✅` — suggestion implemented
-  - `👎` — suggestion evaluated and declined (with reply explaining why)
-  - `😐` — no actionable suggestion found, no action taken
+- **Use reactions as state.** Each comment must have exactly one reaction
+  from the bot at any time. When transitioning from `👀` to a final state,
+  always remove the `👀` reaction first, then add the final reaction. Skip
+  comments that already have a final reaction from the bot. This makes the
+  skill idempotent and safe to run multiple times.
+  - `👀` — acknowledged, evaluating (temporary — add when starting to process)
+  - `✅` — suggestion implemented (final)
+  - `👎` — suggestion evaluated and declined (final)
+  - `😐` — no actionable suggestion found (final)
 - **One commit per suggestion.** When implementing a suggestion, create a new
   commit on the PR branch. Do not amend existing commits.
 - **Attribution required.** Every commit must use `-s` for Signed-off-by and
@@ -274,13 +276,22 @@ Determine if the comment contains an actionable suggestion:
    git push origin <pr-branch>
    ```
 
-7. Update the reaction from `👀` to `✅`:
+7. Transition the reaction from `👀` to `✅`:
 
    ```bash
-   # Remove eyes reaction, add check mark
+   # Find and delete the eyes reaction
+   REACTION_ID=$(gh api "repos/{owner}/{repo}/issues/comments/{id}/reactions" \
+     --jq '[.[] | select(.user.login == "BOT_LOGIN" and .content == "eyes")][0].id')
+   if [ -n "$REACTION_ID" ]; then
+     gh api -X DELETE "repos/{owner}/{repo}/issues/comments/{id}/reactions/${REACTION_ID}"
+   fi
+
+   # Add final reaction
    gh api "repos/{owner}/{repo}/issues/comments/{id}/reactions" \
      -f content="+1"
    ```
+
+   Use the appropriate endpoint for PR review comments vs issue comments.
 
 8. Return to the starting branch:
 
@@ -290,7 +301,8 @@ Determine if the comment contains an actionable suggestion:
 
 #### No actionable suggestion → acknowledge silently
 
-1. Update the reaction from `👀` to `😐` (neutral face)
+1. Remove the `👀` reaction and add `😐` (same delete-then-add pattern as
+   above)
 2. Do not reply — no response is needed for non-actionable comments
 
 #### Non-beneficial suggestion → decline with explanation
@@ -324,7 +336,8 @@ Determine if the comment contains an actionable suggestion:
    [Your explanation]"
    ```
 
-2. Update the reaction from `👀` to `👎`
+2. Remove the `👀` reaction and add `👎` (same delete-then-add pattern as
+   above)
 
 ### Step 5: Write the Feedback Log
 
