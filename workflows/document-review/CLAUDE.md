@@ -11,7 +11,7 @@ Systematic documentation review through these phases:
 7. **Report** (`/report`) — Consolidate all findings into a single deduplicated report
 8. **Fix** (`/fix`) — *(Optional)* Generate inline fix suggestions
 9. **Create PRs** (`/create-prs`) — *(Optional)* Create GitHub pull requests from fix suggestions
-10. **Speedrun** (`/speedrun`) — Run scan → review → report in one shot
+10. **Speedrun** (`/speedrun`) — Run scan → review + verify → report in one shot
 
 Review, verify, and install-test are independent — they can run in parallel as
 sub-agents after scan completes. Each writes to its own findings file.

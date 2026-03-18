@@ -75,20 +75,21 @@ workflows/document-review/
 | `/report` | Consolidate all findings into a deduplicated report |
 | `/fix` | Generate inline fix suggestions (optional) |
 | `/create-prs` | Create GitHub pull requests from fix suggestions (optional) |
-| `/speedrun` | Run scan → review + verify + install-test → usage-test → cleanup → report in one shot |
+| `/speedrun` | Run scan → review + verify → report in one shot |
 
 ## Workflow Phases
 
 ```text
 scan ──┬──> review (sub-agent) ──────────────────┬──> validate ──> report ──> fix ──> create-prs
-       ├──> verify (sub-agent) ──────────────────┤       ↑  │
-       └──> install-test (sub-agent) ────────────┘       └──┘
-                    │                                (retry on fail,
-                    ├──> usage-test (if succeeded)    max 1 retry)
-                    └──> cleanup
+       └──> verify (sub-agent) ──────────────────┘   (automatic;
+                                                      retries once
+install-test ──> usage-test ──> cleanup                on failure)
+  (invoke separately if needed)
 ```
 
-Review, verify, and install-test are independent after scan — they run in parallel as sub-agents, each writing to its own findings file. After a successful install-test, a usage-test agent interacts with the installed project as a user would, verifying that usage documentation matches the actual experience. A cleanup agent then reverts all cluster changes from both install-test and usage-test using the change log. A validation sub-agent checks findings output for coverage, structure, and evidence quality, retrying failed agents once before proceeding.
+> **Note:** `validate` in the diagram is an automatic internal step, not a user-facing command.
+
+Review and verify are independent after scan — they run in parallel as sub-agents, each writing to its own findings file. Install-test, usage-test, and cleanup can be invoked separately and are not part of the `/speedrun` pipeline. A validation sub-agent checks findings output for coverage, structure, and evidence quality, retrying failed agents once before proceeding.
 
 ### 1. Scan
 
@@ -114,17 +115,21 @@ Runs automatically after a successful install-test. Interacts with the installed
 
 Runs automatically after usage-test and install-test complete. Reads the cluster change log and reverts all modifications in reverse order — deleting created resources, restoring modified resources, and undoing shell script effects. Reports any changes that could not be reverted so the user can clean up manually.
 
-### 8. Report
+### 7. Report
 
 Consolidates all findings from review, verify, install-test, and usage-test into a single deduplicated report. Findings are grouped by severity (Critical → Low) with a dimension × severity summary table. Reads from whichever findings files exist.
 
-### 9. Fix (Optional)
+### 8. Fix (Optional)
 
 Generates inline fix suggestions for each finding. Quotes problematic text, provides replacement, and explains rationale. Groups suggestions into pull request units with automatable classification and self-contained context for reliable text matching.
 
-### 10. Create PRs (Optional)
+### 9. Create PRs (Optional)
 
 Creates draft GitHub pull requests from automatable fix suggestions. Only fixes classified as `Automatable: Yes` are applied — non-automatable fixes that need human decisions are skipped entirely. All PRs are created as drafts so a human reviewer can verify the changes before merging. Produces a PR log tracking what was created and any fixes skipped.
+
+### 10. Speedrun
+
+Runs scan → review + verify (parallel) → validate → report in one shot, pausing only for critical decisions. Cluster-based phases (install-test, usage-test, cleanup) are not included — invoke them separately if needed.
 
 ## Quality Dimensions
 
