@@ -110,10 +110,33 @@ mkdir -p artifacts/tmp/feedback
 gh api user --jq '.login' > artifacts/tmp/feedback/bot-login.txt
 ```
 
-#### 1b. Discover PRs by label
+#### 1b. Discover PRs
 
-Query GitHub for open PRs with the `acp:document-review` label in the
-current repository:
+This skill supports two modes depending on whether a PR link was provided
+as an argument:
+
+**Single-PR mode** — a PR URL (e.g.,
+`https://github.com/org/repo/pull/42`) was passed as an argument. Fetch
+that specific PR and verify it has the `acp:document-review` label:
+
+```bash
+gh pr view <number-or-url> \
+  --json number,title,headRefName,baseRefName,url,labels \
+  > artifacts/tmp/feedback/prs-raw.json
+```
+
+Check that the PR has the `acp:document-review` label. If it does not,
+stop and inform the user — this skill only handles document-review PRs.
+Reshape the output into an array and write to `prs.json`:
+
+```bash
+jq '[{number, title, headRefName, baseRefName, url}]' \
+  artifacts/tmp/feedback/prs-raw.json \
+  > artifacts/tmp/feedback/prs.json
+```
+
+**All-PRs mode** — no PR link was provided. Query GitHub for all open PRs
+with the `acp:document-review` label in the current repository:
 
 ```bash
 gh pr list --label "acp:document-review" --state open \
@@ -121,11 +144,11 @@ gh pr list --label "acp:document-review" --state open \
   > artifacts/tmp/feedback/prs.json
 ```
 
-If the result is empty, stop and inform the user — there are no
-document-review PRs to monitor.
+**In either mode:** if the result is empty, stop and inform the user —
+there are no document-review PRs to monitor.
 
-Build an **allowed branches set** from the `headRefName` values in this
-file. Only these branches may be checked out or pushed to.
+Build an **allowed branches set** from the `headRefName` values in
+`prs.json`. Only these branches may be checked out or pushed to.
 
 #### 1c. Fetch comments and reactions for each PR
 
