@@ -104,13 +104,26 @@ rm -rf artifacts/tmp/feedback
 mkdir -p artifacts/tmp/feedback
 ```
 
-#### 1a. Get the bot's identity
+#### 1a. Verify write access
+
+Determine the repository's `OWNER/REPO` and confirm the current session
+has write access:
+
+```bash
+REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
+scripts/check-gh-write-access.sh "$REPO"
+```
+
+If the check fails, stop and inform the user — this skill requires write
+access to push commits, post comments, and add reactions.
+
+#### 1b. Get the bot's identity
 
 ```bash
 gh api user --jq '.login' > artifacts/tmp/feedback/bot-login.txt
 ```
 
-#### 1b. Discover PRs
+#### 1c. Discover PRs
 
 This skill supports two modes depending on whether a PR link was provided
 as an argument:
@@ -150,7 +163,7 @@ there are no document-review PRs to monitor.
 Build an **allowed branches set** from the `headRefName` values in
 `prs.json`. Only these branches may be checked out or pushed to.
 
-#### 1c. Fetch comments and reactions for each PR
+#### 1d. Fetch comments and reactions for each PR
 
 For each PR in `artifacts/tmp/feedback/prs.json`, fetch all comments and
 their reactions in bulk:
@@ -189,7 +202,7 @@ for number in $(jq -r '.[].number' artifacts/tmp/feedback/prs.json); do
 done
 ```
 
-#### 1d. Load authorized reviewers
+#### 1e. Load authorized reviewers
 
 Search for ownership files in the target repository:
 
@@ -225,7 +238,7 @@ filters in order:
    (`artifacts/tmp/feedback/reactions-{type}-{id}.txt`). If the bot's login
    appears in it, the comment has already been handled — skip it.
 3. **Skip unauthorized users** — if `user` is not in the authorized
-   reviewers list from Step 1d
+   reviewers list from Step 1e
 
 Comments that pass all three filters are "new actionable comments".
 
@@ -265,7 +278,7 @@ Determine if the comment contains an actionable suggestion:
 #### Beneficial suggestion → implement it
 
 1. **Verify the branch is allowed.** Confirm `<pr-branch>` is in the allowed
-   branches set built from `artifacts/tmp/feedback/prs.json` in Step 1b.
+   branches set built from `artifacts/tmp/feedback/prs.json` in Step 1c.
    If it is not, skip this comment and log a security warning.
 
 2. Check out the PR branch:
