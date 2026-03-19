@@ -70,10 +70,10 @@ a comment.
   always remove the `👀` reaction first, then add the final reaction. Skip
   comments that already have a final reaction from the bot. This makes the
   skill idempotent and safe to run multiple times.
-  - `👀` — acknowledged, evaluating (temporary — add when starting to process)
-  - `✅` — suggestion implemented (final)
-  - `👎` — suggestion evaluated and declined (final)
-  - `😐` — no actionable suggestion found (final)
+  - `👀` (eyes) — evaluating (temporary — add when starting to process)
+  - `🚀` (rocket) — suggestion implemented (final)
+  - `👎` (-1) — suggestion evaluated and declined (final)
+  - `👍` (+1) — noted, no actionable suggestion (final)
 - **One commit per suggestion.** When implementing a suggestion, create a new
   commit on the PR branch. Do not amend existing commits.
 - **Attribution required.** Every commit must use `-s` for Signed-off-by and
@@ -276,7 +276,7 @@ Determine if the comment contains an actionable suggestion:
    git push origin <pr-branch>
    ```
 
-7. Transition the reaction from `👀` to `✅`:
+7. Transition the reaction from `👀` to `🚀`:
 
    ```bash
    # Find and delete the eyes reaction
@@ -288,7 +288,7 @@ Determine if the comment contains an actionable suggestion:
 
    # Add final reaction
    gh api "repos/{owner}/{repo}/issues/comments/{id}/reactions" \
-     -f content="+1"
+     -f content=rocket
    ```
 
    Use the appropriate endpoint for PR review comments vs issue comments.
@@ -301,8 +301,8 @@ Determine if the comment contains an actionable suggestion:
 
 #### No actionable suggestion → acknowledge silently
 
-1. Remove the `👀` reaction and add `😐` (same delete-then-add pattern as
-   above)
+1. Remove the `👀` reaction and add `👍` (same delete-then-add pattern as
+   above, using content `+1`)
 2. Do not reply — no response is needed for non-actionable comments
 
 #### Non-beneficial suggestion → decline with explanation
