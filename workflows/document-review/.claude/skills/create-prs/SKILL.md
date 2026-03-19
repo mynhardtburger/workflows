@@ -71,6 +71,16 @@ git status --porcelain
 ```
 
 - Verify the remote URL matches the fixes file's **Repository** field
+- Verify write access to the repository:
+
+```bash
+REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
+scripts/check-gh-write-access.sh "$REPO"
+```
+
+If the check fails, stop and inform the user — this skill requires write
+access to push branches, create PRs, and manage labels.
+
 - Ensure the working tree is clean (no uncommitted changes) — if dirty, stop
   and ask the user to commit or stash
 - Fetch the latest base branch:
