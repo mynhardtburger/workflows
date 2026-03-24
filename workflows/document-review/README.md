@@ -9,7 +9,6 @@ Systematic workflow for reviewing a project's documentation — assessing qualit
 - Classifies findings by severity for prioritized action
 - Cross-references documentation claims against source code
 - Runs review and verify in parallel as sub-agents for speed
-- Validates sub-agent output and retries on quality failures
 - Generates inline fix suggestions grouped by file
 - Supports a speedrun mode for one-shot review
 
@@ -32,7 +31,6 @@ workflows/document-review/
 │       ├── scan/SKILL.md         # Document discovery
 │       ├── review/SKILL.md       # Quality evaluation
 │       ├── verify/SKILL.md       # Source code verification
-│       ├── validate/SKILL.md     # Output validation
 │       ├── report/SKILL.md       # Report generation
 │       └── fix/SKILL.md          # Fix suggestion generation
 ├── templates/                    # Output format templates
@@ -59,15 +57,11 @@ workflows/document-review/
 ## Workflow Phases
 
 ```text
-scan ──┬──> review (sub-agent) ──┬──> validate ──> report ──> fix
-       └──> verify (sub-agent) ──┘   (automatic;
-                                      retries once
-                                      on failure)
+scan ──┬──> review (sub-agent) ──┬──> report ──> fix
+       └──> verify (sub-agent) ──┘
 ```
 
-> **Note:** `validate` in the diagram is an automatic internal step, not a user-facing command.
-
-Review and verify are independent after scan — they run in parallel as sub-agents, each writing to its own findings file. A validation sub-agent checks findings output for coverage, structure, and evidence quality, retrying failed agents once before proceeding.
+Review and verify are independent after scan — they run in parallel as sub-agents, each writing to its own findings file.
 
 ### 1. Scan
 
@@ -91,7 +85,7 @@ Generates inline fix suggestions for each finding. Quotes problematic text, prov
 
 ### 6. Speedrun
 
-Runs scan → review + verify (parallel) → validate → report in one shot, pausing only for critical decisions.
+Runs scan → review + verify (parallel) → report in one shot, pausing only for critical decisions.
 
 ## Quality Dimensions
 
