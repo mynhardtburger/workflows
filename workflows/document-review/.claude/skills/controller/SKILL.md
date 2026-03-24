@@ -69,17 +69,6 @@ scan ──┬──> review (sub-agent) ──┬──> validate ──> repor
 
 Report and fix read from all findings files (whichever exist).
 
-### Standalone Phases (not part of the main workflow)
-
-| Phase | Output |
-|-------|--------|
-| Handle-feedback | `artifacts/feedback-log.md` |
-
-Handle-feedback (`/handle-feedback`) runs independently — typically via a
-cron job — and does not go through the controller. It discovers PRs by
-querying GitHub for the `acp:document-review` label and operates without
-prior workflow context.
-
 ## How to Execute a Phase
 
 1. **Announce** the phase to the user before doing anything else, e.g.,
@@ -248,8 +237,6 @@ make sense:
 - The workflow is complete
 - Report all created PR links to the user
 - Note any fixes that were skipped due to context drift
-- Mention that `/handle-feedback` can be run separately (e.g., via cron) to
-  monitor PRs for reviewer comments
 
 **Going back** — sometimes earlier work needs revision:
 

@@ -1,14 +1,13 @@
 ---
 name: handle-feedback
-description: Monitor PRs created by /create-prs for reviewer comments and act on feedback.
+description: Monitor PRs for reviewer comments and act on feedback.
 ---
 
 # Handle PR Feedback Skill
 
-You are monitoring pull requests created by the `/create-prs` phase for
-reviewer comments. You evaluate each comment, decide whether it contains a
-beneficial suggestion, and either implement the change or explain why you
-are not implementing it.
+You are monitoring pull requests for reviewer comments. You evaluate each
+comment, decide whether it contains a beneficial suggestion, and either
+implement the change or explain why you are not implementing it.
 
 ## Your Role
 
@@ -66,14 +65,14 @@ a comment.
   identity that created the PR (i.e., the bot/agent account), skip it. This
   prevents self-conversation loops.
 - **Use reactions as state.** Each comment must have exactly one reaction
-  from the bot at any time. When transitioning from `👀` to a final state,
-  always remove the `👀` reaction first, then add the final reaction. Skip
+  from the bot at any time. When transitioning from `eyes` to a final state,
+  always remove the `eyes` reaction first, then add the final reaction. Skip
   comments that already have a final reaction from the bot. This makes the
   skill idempotent and safe to run multiple times.
-  - `👀` (eyes) — evaluating (temporary — add when starting to process)
-  - `🚀` (rocket) — suggestion implemented (final)
-  - `👎` (-1) — suggestion evaluated and declined (final)
-  - `👍` (+1) — noted, no actionable suggestion (final)
+  - `eyes` — evaluating (temporary — add when starting to process)
+  - `rocket` — suggestion implemented (final)
+  - `-1` — suggestion evaluated and declined (final)
+  - `+1` — noted, no actionable suggestion (final)
 - **One commit per suggestion.** When implementing a suggestion, create a new
   commit on the PR branch. Do not amend existing commits.
 - **Attribution required.** Every commit must use `-s` for Signed-off-by and
@@ -237,7 +236,7 @@ For each new actionable comment:
 
 #### 3a. Mark as seen
 
-React with `👀` immediately:
+React with `eyes` immediately:
 
 ```bash
 gh api "repos/{owner}/{repo}/issues/comments/{id}/reactions" \
@@ -264,7 +263,7 @@ Determine if the comment contains an actionable suggestion:
 
 ### Step 4: Act on the Classification
 
-#### Beneficial suggestion → implement it
+#### Beneficial suggestion -> implement it
 
 1. **Verify the branch is allowed.** Confirm `<pr-branch>` is in the allowed
    branches set built from `artifacts/tmp/feedback/prs.json` in Step 1c.
@@ -301,7 +300,7 @@ Determine if the comment contains an actionable suggestion:
    git push origin <pr-branch>
    ```
 
-7. Transition the reaction from `👀` to `🚀`:
+7. Transition the reaction from `eyes` to `rocket`:
 
    ```bash
    # Find and delete the eyes reaction
@@ -324,13 +323,13 @@ Determine if the comment contains an actionable suggestion:
    git checkout <starting-branch>
    ```
 
-#### No actionable suggestion → acknowledge silently
+#### No actionable suggestion -> acknowledge silently
 
-1. Remove the `👀` reaction and add `👍` (same delete-then-add pattern as
+1. Remove the `eyes` reaction and add `+1` (same delete-then-add pattern as
    above, using content `+1`)
 2. Do not reply — no response is needed for non-actionable comments
 
-#### Non-beneficial suggestion → decline with explanation
+#### Non-beneficial suggestion -> decline with explanation
 
 1. Reply to the comment explaining why the suggestion was not implemented.
    Be respectful and cite evidence (code references, test results, or
@@ -361,7 +360,7 @@ Determine if the comment contains an actionable suggestion:
    [Your explanation]"
    ```
 
-2. Remove the `👀` reaction and add `👎` (same delete-then-add pattern as
+2. Remove the `eyes` reaction and add `-1` (same delete-then-add pattern as
    above)
 
 ### Step 5: Write the Feedback Log
@@ -425,5 +424,4 @@ Report:
 - Suggestions implemented, declined, or ignored
 - Any errors (push failures, API errors)
 
-This is a standalone phase — it does not feed back into the controller.
 If there are no more comments to process, the run is complete.
