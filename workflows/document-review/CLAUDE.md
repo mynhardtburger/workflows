@@ -7,8 +7,7 @@ Systematic documentation review through these phases:
 3. **Verify** (`/verify`) — *(Optional)* Cross-reference docs against source code
 4. **Report** (`/report`) — Consolidate all findings into a single deduplicated report
 5. **Fix** (`/fix`) — *(Optional)* Generate inline fix suggestions
-6. **Create PRs** (`/create-prs`) — *(Optional)* Create GitHub pull requests from fix suggestions
-7. **Speedrun** (`/speedrun`) — Run scan → review + verify → report in one shot
+6. **Speedrun** (`/speedrun`) — Run scan → review + verify → report in one shot
 
 Review and verify are independent — they can run in parallel as sub-agents
 after scan completes. Each writes to its own findings file. A validation

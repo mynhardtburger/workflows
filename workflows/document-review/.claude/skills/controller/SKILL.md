@@ -30,11 +30,7 @@ workflow by executing phases and handling transitions between them.
 5. **Fix** (`/fix`) — `.claude/skills/fix/SKILL.md`
    Generate inline fix suggestions for each finding.
 
-6. **Create PRs** (`/create-prs`) — `.claude/skills/create-prs/SKILL.md`
-   Create GitHub pull requests from automatable fix suggestions.
-   Non-automatable fixes are skipped.
-
-7. **Speedrun** (`/speedrun`)
+6. **Speedrun** (`/speedrun`)
    Run scan → review + verify (parallel) → validate → report automatically,
    pausing only for critical decisions.
 
@@ -43,7 +39,7 @@ Phases can be skipped or reordered at the user's discretion.
 ## Dependency Graph
 
 ```text
-scan ──┬──> review (sub-agent) ──┬──> validate ──> report ──> fix ──> create-prs
+scan ──┬──> review (sub-agent) ──┬──> validate ──> report ──> fix
        └──> verify (sub-agent) ──┘       ↑  │
                                          └──┘
                                     (retry on fail,
@@ -65,7 +61,6 @@ scan ──┬──> review (sub-agent) ──┬──> validate ──> repor
 |-------|--------|
 | Review | `artifacts/findings-review.md` |
 | Verify | `artifacts/findings-verify.md` |
-| Create-prs | `artifacts/pr-log.md` |
 
 Report and fix read from all findings files (whichever exist).
 
@@ -227,16 +222,8 @@ make sense:
 
 **After fix:**
 
-- Recommend `/create-prs` if automatable fixes were found — this creates
-  GitHub pull requests from the fix suggestions
-- The workflow is typically complete if PRs are not desired
+- The workflow is typically complete
 - Offer to re-run `/report` to reflect any updates
-
-**After create-prs:**
-
-- The workflow is complete
-- Report all created PR links to the user
-- Note any fixes that were skipped due to context drift
 
 **Going back** — sometimes earlier work needs revision:
 
@@ -296,7 +283,4 @@ invoked without an existing inventory, run `/scan` first and inform the user.
   findings; this controller decides what to recommend next.
 - **Respect the target project.** This workflow reviews external project
   documentation. Do not modify the target project's files unless the user
-  explicitly requests it via `/fix` or `/create-prs`.
-- **Confirm before creating PRs.** The `/create-prs` phase pushes branches
-  and creates pull requests on GitHub. Always confirm with the user before
-  dispatching it, since these are externally visible actions.
+  explicitly requests it via `/fix`.
