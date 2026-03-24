@@ -30,7 +30,11 @@ workflow by executing phases and handling transitions between them.
 5. **Fix** (`/fix`) — `.claude/skills/fix/SKILL.md`
    Generate inline fix suggestions for each finding.
 
-6. **Speedrun** (`/speedrun`)
+6. **Jira** (`/jira`) — `.claude/skills/jira/SKILL.md`
+   Create a Jira epic from the report with child bugs and tasks for each
+   finding. Requires the `mcp-atlassian` MCP integration.
+
+7. **Speedrun** (`/speedrun`)
    Run scan → review + verify (parallel) → report automatically, pausing
    only for critical decisions.
 
@@ -40,7 +44,7 @@ Phases can be skipped or reordered at the user's discretion.
 
 ```text
 scan ──┬──> review (sub-agent) ──┬──> report ──> fix
-       └──> verify (sub-agent) ──┘
+       └──> verify (sub-agent) ──┘            └──> jira
 ```
 
 - **Scan** must run first — all other phases depend on the inventory.
@@ -48,6 +52,7 @@ scan ──┬──> review (sub-agent) ──┬──> report ──> fix
   inventory and write to separate findings files. They can run in parallel
   as sub-agents.
 - **Report** and **fix** read from whichever findings files exist.
+- **Jira** reads from `artifacts/report.md` and requires a completed report.
 
 ### Findings Files
 
@@ -152,12 +157,19 @@ make sense:
 **After report:**
 
 - Offer `/fix` if actionable issues were found
+- Offer `/jira` to create Jira issues for tracking remediation
 - The workflow may be complete if the report is the desired output
 
 **After fix:**
 
 - The workflow is typically complete
+- Offer `/jira` to create Jira issues for tracking remediation
 - Offer to re-run `/report` to reflect any updates
+
+**After jira:**
+
+- The workflow is typically complete
+- Offer `/fix` if fix suggestions haven't been generated yet
 
 **Going back** — sometimes earlier work needs revision:
 

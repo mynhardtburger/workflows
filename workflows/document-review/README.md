@@ -10,6 +10,7 @@ Systematic workflow for reviewing a project's documentation — assessing qualit
 - Cross-references documentation claims against source code
 - Runs review and verify in parallel as sub-agents for speed
 - Generates inline fix suggestions grouped by file
+- Creates Jira epics with child bugs/tasks from the report via MCP
 - Supports a speedrun mode for one-shot review
 
 ## Directory Structure
@@ -25,6 +26,7 @@ workflows/document-review/
 │   │   ├── verify.md             # Code cross-referencing
 │   │   ├── report.md             # Consolidated report
 │   │   ├── fix.md                # Fix suggestions
+│   │   ├── jira.md               # Jira issue creation
 │   │   └── speedrun.md           # Full pipeline
 │   └── skills/
 │       ├── controller/SKILL.md   # Phase orchestration
@@ -32,7 +34,8 @@ workflows/document-review/
 │       ├── review/SKILL.md       # Quality evaluation
 │       ├── verify/SKILL.md       # Source code verification
 │       ├── report/SKILL.md       # Report generation
-│       └── fix/SKILL.md          # Fix suggestion generation
+│       ├── fix/SKILL.md          # Fix suggestion generation
+│       └── jira/SKILL.md         # Jira issue creation
 ├── templates/                    # Output format templates
 │   ├── inventory.md
 │   ├── findings-review.md
@@ -52,13 +55,14 @@ workflows/document-review/
 | `/verify` | Cross-reference docs against source code (optional) |
 | `/report` | Consolidate all findings into a deduplicated report |
 | `/fix` | Generate inline fix suggestions (optional) |
+| `/jira` | Create Jira epic with child bugs/tasks from the report (optional) |
 | `/speedrun` | Run scan → review + verify → report in one shot |
 
 ## Workflow Phases
 
 ```text
 scan ──┬──> review (sub-agent) ──┬──> report ──> fix
-       └──> verify (sub-agent) ──┘
+       └──> verify (sub-agent) ──┘            └──> jira
 ```
 
 Review and verify are independent after scan — they run in parallel as sub-agents, each writing to its own findings file.
@@ -83,7 +87,11 @@ Consolidates all findings from review and verify into a single deduplicated repo
 
 Generates inline fix suggestions for each finding. Quotes problematic text, provides replacement, and explains rationale. Groups suggestions into pull request units with automatable classification and self-contained context for reliable text matching.
 
-### 6. Speedrun
+### 6. Jira (Optional)
+
+Creates a Jira epic from the report with a child bug or task for each finding. Bugs are for findings that impact external users or customers. Tasks are for developer-facing or maintenance items. Requires the `mcp-atlassian` MCP integration to be active. Accepts project key, component, labels, fix version, and team as arguments or environment variables.
+
+### 7. Speedrun
 
 Runs scan → review + verify (parallel) → report in one shot, pausing only for critical decisions.
 
@@ -128,3 +136,4 @@ Output files are written to `artifacts/`:
 4. Optionally run `/verify` to check docs against code
 5. Run `/report` to consolidate all findings
 6. Optionally run `/fix` for concrete fix suggestions
+7. Optionally run `/jira` to create Jira issues for tracking
