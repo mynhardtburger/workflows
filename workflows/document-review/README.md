@@ -7,7 +7,7 @@ Systematic workflow for reviewing a project's documentation — assessing qualit
 - Auto-discovers all documentation files across the project
 - Evaluates docs against 7 quality dimensions
 - Classifies findings by severity for prioritized action
-- Cross-references documentation claims against source code
+- Cross-references documentation claims against source code using parallel discovery agents
 - Runs review and verify in parallel as sub-agents for speed
 - Generates inline fix suggestions grouped by file
 - Creates Jira epics with child bugs/tasks from the report via MCP
@@ -33,6 +33,7 @@ workflows/document-review/
 │       ├── scan/SKILL.md         # Document discovery
 │       ├── review/SKILL.md       # Quality evaluation
 │       ├── verify/SKILL.md       # Source code verification
+│       ├── verify/references/   # Discovery agent prompts
 │       ├── report/SKILL.md       # Report generation
 │       ├── fix/SKILL.md          # Fix suggestion generation
 │       └── jira/SKILL.md         # Jira issue creation
@@ -77,7 +78,11 @@ Deep-reads each document evaluating 7 quality dimensions: accuracy, completeness
 
 ### 3. Verify (Optional)
 
-Cross-references documentation claims against actual source code. Checks CLI flags, API endpoints, configuration options, default values, and behavior descriptions. Flags undocumented features found in code.
+Runs a three-stage pipeline to systematically verify documentation against source code:
+
+1. **Reconnaissance** — Detects languages, frameworks, and components in the project
+2. **Discovery** — Dispatches up to 8 parallel agents to scan source code for env vars, CLI args, config schemas, API endpoints, data models, file I/O, external deps, and build targets
+3. **Verification** — Cross-references the discovered code inventory against documentation to find inaccuracies, undocumented features, and stale references
 
 ### 4. Report
 

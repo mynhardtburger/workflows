@@ -16,6 +16,7 @@
 | Mismatch (Critical) | N |
 | Partial (Low) | N |
 | Undocumented (High) | N |
+| Stale (High) | N |
 
 ## Findings by Document
 
@@ -48,3 +49,39 @@
   ```python
   parser.add_argument('--dry-run', help='Preview changes without applying')
   ```
+
+## Stale References
+
+### Stale 1
+
+- **Dimension:** Accuracy
+- **Doc location:** docs/guide.md:45
+- **Issue:** References `--legacy-mode` flag which no longer exists in code
+- **Evidence:** Grep for `legacy-mode` across codebase returns no matches
+- **Fix:** Remove the `--legacy-mode` reference.
+
+## Low-Confidence Findings
+
+- "Found `DB_HOST` in docs and `MAAS_DB_HOST` in code — possible match but
+  names differ enough to be uncertain"
+- "Config key `timeout` appears in example but may be dynamically constructed"
+
+## Inventory Coverage
+
+| Category | Status | Items Found |
+|----------|--------|-------------|
+| Env vars | completed | N |
+| CLI args | completed | N |
+| Config schema | skipped (no config libraries) | - |
+| API schema | completed | N |
+| Data models | completed | N |
+| File I/O | skipped (no file operations) | - |
+| External deps | completed | N |
+| Build/deploy | completed | N |
+
+[Note any agents that failed and why]
+
+## Code Inventory
+
+[The complete merged inventory from Stage 2, organized by workflow and
+category]
