@@ -11,7 +11,8 @@ becomes a child issue under a parent epic so the team can track remediation.
 ## Prerequisites
 
 - `artifacts/report.md` must exist (run `/report` first)
-- `pandoc` must be installed (used to convert Markdown to Jira wiki markup)
+- `pandoc` must be installed (used to convert Markdown to Jira wiki markup).
+  Install via `pip install pypandoc_binary` (bundles the pandoc binary).
 - The following environment variables must be set for Jira API access:
   - `JIRA_URL` — base URL of the Jira instance (e.g., `https://myorg.atlassian.net`)
   - `JIRA_EMAIL` — email address for authentication
@@ -223,8 +224,8 @@ After all issues are created, present a summary to the user:
   create child issues without a parent epic
 - If any of `JIRA_URL`, `JIRA_EMAIL`, or `JIRA_API_TOKEN` are not set, stop
   and tell the user which variables are missing
-- If `pandoc` is not installed, stop and tell the user to install it
-  (e.g., `brew install pandoc`)
+- If `pandoc` is not installed, install it with `pip install pypandoc_binary`.
+  If that fails, stop and tell the user.
 
 ## Output
 
