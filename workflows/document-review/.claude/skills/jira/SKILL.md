@@ -93,16 +93,10 @@ authentication with `$JIRA_EMAIL:$JIRA_API_TOKEN` and target
 
 #### Convert Markdown to Jira wiki markup
 
-Jira REST API v2 description fields use wiki markup, not Markdown. Before
-sending any description, convert it with pandoc:
-
-```bash
-pandoc -f markdown -t jira artifacts/report.md -o /tmp/report-jira.wiki
-```
-
-Use the converted content for the epic description. Apply the same conversion
-for every child issue description in Step 4 (pipe the Markdown through
-`pandoc -f markdown -t jira`).
+Jira REST API v2 description fields use wiki markup, not Markdown. Convert
+content with pandoc before sending (pipe the Markdown through
+`pandoc -f markdown -t jira`). This applies to the epic description and every
+child issue description in Step 4.
 
 #### Create the Epic with:
 
@@ -113,12 +107,28 @@ for every child issue description in Step 4 (pipe the Markdown through
 - **Summary**: `Documentation Review Report of <date> for <scope>` where
   `<date>` is the report date and `<scope>` is the repository or repositories
   listed in the report header (if multiple repos, join them with commas)
-- **Description**: The pandoc-converted content of `artifacts/report.md` so the
-  entire report is captured in Jira with proper formatting.
+- **Description**: Only the header portion of `artifacts/report.md` — everything
+  before the `## Summary` heading (title, date, repositories, and instruction). 
+  Convert this extract to Jira wiki markup via pandoc before sending.
 - **Labels**: merge `acp:document-review` with any user-provided labels
 - **Component**: set if provided
 
 Record the created epic key (e.g., `PROJ-123`).
+
+#### Attach the full report
+
+After creating the epic, attach `artifacts/report.md` to it using:
+
+```bash
+curl -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
+  -X POST \
+  -H "X-Atlassian-Token: no-check" \
+  -F "file=@artifacts/report.md" \
+  "$JIRA_URL/rest/api/2/issue/<epic-key>/attachments"
+```
+
+This keeps the full report accessible from the epic without cluttering the
+description field.
 
 If an initial status was specified, transition the epic to that status using
 `POST $JIRA_URL/rest/api/2/issue/<key>/transitions` — first GET the available
