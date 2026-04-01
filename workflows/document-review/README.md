@@ -16,15 +16,7 @@ Systematic workflow for reviewing a project's documentation — assessing qualit
 
 ### Loading the Workflow
 
-In ACP, select **Custom Workflow…** and fill in:
-
-| Field | Value |
-|-------|-------|
-| **URL** | `https://github.com/ambient-code/workflows.git` |
-| **Branch** | `main` |
-| **Path** | `workflows/document-review` |
-
-Then open or point the session at the project whose documentation you want to review.
+In ACP, select **Document Review** from the workflow list, then open or point the session at the project repositories whose documentation you want to review.
 
 ### One-Shot Review
 
