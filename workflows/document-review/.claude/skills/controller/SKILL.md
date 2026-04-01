@@ -184,8 +184,8 @@ When the user invokes `/full-review`:
 1. Execute the **scan** phase — announce it, read the skill, run it
 2. Launch **quality-review** and **code-check** as parallel sub-agents
 3. Once both complete, execute the **report** phase
-5. Present the final report to the user
-6. Offer `/jira` as a follow-up option
+4. Present the final report to the user
+5. Offer `/jira` as a follow-up option
 
 During full-review, only pause if:
 

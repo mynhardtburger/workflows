@@ -4,7 +4,7 @@ Systematic documentation review through these phases:
 
 1. **Scan** (`/scan`) — Discover and catalog all documentation files
 2. **Quality Review** (`/quality-review`) — Deep quality analysis against 7 dimensions
-3. **Code Check** (`/code-check`) — *(Optional)* Cross-reference docs against source code
+3. **Code Check** (`/code-check`) — Cross-reference docs against source code
 4. **Report** (`/report`) — Consolidate all findings into a single deduplicated report
 5. **Jira** (`/jira`) — *(Optional)* Create Jira epic with child bugs/tasks from the report
 6. **Full Review** (`/full-review`) — Run scan → quality-review + code-check → report in one shot
