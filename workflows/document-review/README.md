@@ -10,7 +10,7 @@ Systematic workflow for reviewing a project's documentation — assessing qualit
 - Cross-references documentation claims against source code using parallel discovery agents
 - Runs quality-review and code-check in parallel as sub-agents for speed
 - Creates Jira epics with child bugs/tasks from the report via Jira REST API
-- Supports a speedrun mode for one-shot review
+- Supports a full-review mode for one-shot review
 
 ## Directory Structure
 
@@ -25,7 +25,7 @@ workflows/document-review/
 │   │   ├── code-check.md         # Code cross-referencing
 │   │   ├── report.md             # Consolidated report
 │   │   ├── jira.md               # Jira issue creation
-│   │   └── speedrun.md           # Full pipeline
+│   │   └── full-review.md        # Full pipeline
 │   └── skills/
 │       ├── controller/SKILL.md   # Phase orchestration
 │       ├── scan/SKILL.md         # Document discovery
@@ -52,7 +52,7 @@ workflows/document-review/
 | `/code-check` | Cross-reference docs against source code (optional) |
 | `/report` | Consolidate all findings into a deduplicated report |
 | `/jira` | Create Jira epic with child bugs/tasks from the report (optional) |
-| `/speedrun` | Run scan → quality-review + code-check → report in one shot |
+| `/full-review` | Run scan → quality-review + code-check → report in one shot |
 
 ## Workflow Phases
 
@@ -87,7 +87,7 @@ Consolidates all findings from quality review and code check into a single dedup
 
 Creates a Jira epic from the report with a child bug or task for each finding. Bugs are for findings that impact external users or customers. Tasks are for developer-facing or maintenance items. Uses the Jira REST API via `curl` (requires `JIRA_URL`, `JIRA_EMAIL`, and `JIRA_API_TOKEN` environment variables). Accepts project key, component, labels, fix version, and team as arguments or environment variables.
 
-### 6. Speedrun
+### 6. Full Review
 
 Runs scan → quality-review + code-check (parallel) → report in one shot, pausing only for critical decisions.
 
@@ -126,7 +126,7 @@ Output files are written to `artifacts/`:
 ## Quick Start
 
 1. Point the workflow at a project repository
-2. Run `/scan` to discover documentation (or `/speedrun` for the full pipeline)
+2. Run `/scan` to discover documentation (or `/full-review` for the full pipeline)
 3. Run `/quality-review` for quality analysis
 4. Optionally run `/code-check` to check docs against code
 5. Run `/report` to consolidate all findings

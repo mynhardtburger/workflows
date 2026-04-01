@@ -31,7 +31,7 @@ workflow by executing phases and handling transitions between them.
    Create a Jira epic from the report with child bugs and tasks for each
    finding. Uses the Jira REST API via `curl`.
 
-6. **Speedrun** (`/speedrun`)
+6. **Full Review** (`/full-review`)
    Run scan → quality-review + code-check (parallel) → report automatically, pausing
    only for critical decisions.
 
@@ -86,7 +86,7 @@ one after another — do not stop between them to ask what to do next.
      needs `/scan`), execute them in order
    - If commands are independent (e.g., `/quality-review` and `/code-check`),
      run them in
-     parallel as sub-agents — same as during speedrun
+     parallel as sub-agents — same as during full-review
 4. **Report combined results** at the end, after all commands have completed
 5. **Then stop and wait** — recommend next steps as usual
 
@@ -102,7 +102,7 @@ one after another — do not stop between them to ask what to do next.
 
 ## Running Analysis Sub-Agents in Parallel
 
-When multiple analysis phases should run (e.g., during speedrun, or when the
+When multiple analysis phases should run (e.g., during full-review, or when the
 user requests several), use the Agent tool to launch them as parallel
 sub-agents:
 
@@ -140,7 +140,7 @@ make sense:
 - Recommend `/quality-review` — the natural next step
 - Offer `/code-check` if documentation references lots of code (APIs, CLI flags)
 - Mention that quality-review and code-check can run in parallel
-- Offer `/speedrun` if the user wants to go fast
+- Offer `/full-review` if the user wants to run the entire pipeline at once
 
 **After quality-review:**
 
@@ -174,12 +174,12 @@ Recommended next step: /quality-review — deep quality analysis of the 42 docum
 
 Other options:
 - /code-check — cross-reference docs against source code (can run in parallel with quality-review)
-- /speedrun — run scan → quality-review + code-check → report automatically
+- /full-review — run scan → quality-review + code-check → report automatically
 ```
 
-## Executing a Speedrun
+## Executing a Full Review
 
-When the user invokes `/speedrun`:
+When the user invokes `/full-review`:
 
 1. Execute the **scan** phase — announce it, read the skill, run it
 2. Launch **quality-review** and **code-check** as parallel sub-agents
@@ -187,7 +187,7 @@ When the user invokes `/speedrun`:
 5. Present the final report to the user
 6. Offer `/jira` as a follow-up option
 
-During speedrun, only pause if:
+During full-review, only pause if:
 
 - The project repository cannot be found or accessed
 - No documentation files are discovered
@@ -207,7 +207,7 @@ invoked without an existing inventory, run `/scan` first and inform the user.
 ## Rules
 
 - **Never auto-advance.** Always wait for the user between phases (except
-  during speedrun or when the user provides multiple commands in a single
+  during full-review or when the user provides multiple commands in a single
   prompt).
 - **Recommendations come from this file, not from skills.** Skills report
   findings; this controller decides what to recommend next.
