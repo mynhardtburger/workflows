@@ -27,14 +27,11 @@ workflow by executing phases and handling transitions between them.
    Consolidate all findings into a single deduplicated report grouped by
    severity.
 
-5. **Fix** (`/fix`) — `.claude/skills/fix/SKILL.md`
-   Generate inline fix suggestions for each finding.
-
-6. **Jira** (`/jira`) — `.claude/skills/jira/SKILL.md`
+5. **Jira** (`/jira`) — `.claude/skills/jira/SKILL.md`
    Create a Jira epic from the report with child bugs and tasks for each
    finding. Uses the Jira REST API via `curl`.
 
-7. **Speedrun** (`/speedrun`)
+6. **Speedrun** (`/speedrun`)
    Run scan → quality-review + code-check (parallel) → report automatically, pausing
    only for critical decisions.
 
@@ -43,15 +40,14 @@ Phases can be skipped or reordered at the user's discretion.
 ## Dependency Graph
 
 ```text
-scan ──┬──> quality-review (sub-agent) ──┬──> report ──> fix
-       └──> code-check (sub-agent)    ──┘            └──> jira
+scan ──┬──> quality-review (sub-agent) ──┬──> report
+       └──> code-check (sub-agent)    ──┘       └──> jira
 ```
 
 - **Scan** must run first — all other phases depend on the inventory.
 - **Quality review** and **code check** are independent of each other. Both
   read the inventory and write to separate findings files. They can run in
   parallel as sub-agents.
-- **Report** and **fix** read from whichever findings files exist.
 - **Jira** reads from `artifacts/report.md` and requires a completed report.
 
 ### Findings Files
@@ -61,7 +57,7 @@ scan ──┬──> quality-review (sub-agent) ──┬──> report ──>
 | Quality Review | `artifacts/findings-quality-review.md` |
 | Code Check | `artifacts/findings-code-check.md` |
 
-Report and fix read from all findings files (whichever exist).
+Report reads from all findings files (whichever exist).
 
 ## How to Execute a Phase
 
@@ -101,9 +97,8 @@ one after another — do not stop between them to ask what to do next.
   code-check in parallel, then present results
 - `/scan /quality-review /report` → run scan, then quality-review, then report,
   then present results
-- `/quality-review /report /fix` → run quality-review (scan first if no
-  inventory), then
-  report, then fix, then present results
+- `/quality-review /report` → run quality-review (scan first if no inventory),
+  then report, then present results
 
 ## Running Analysis Sub-Agents in Parallel
 
@@ -132,7 +127,7 @@ happened.
 ### Typical Flow
 
 ```text
-scan → quality-review + code-check (parallel) → report → (optional) fix
+scan → quality-review + code-check (parallel) → report
 ```
 
 ### What to Recommend
@@ -158,20 +153,12 @@ make sense:
 
 **After report:**
 
-- Offer `/fix` if actionable issues were found
 - Offer `/jira` to create Jira issues for tracking remediation
 - The workflow may be complete if the report is the desired output
-
-**After fix:**
-
-- The workflow is typically complete
-- Offer `/jira` to create Jira issues for tracking remediation
-- Offer to re-run `/report` to reflect any updates
 
 **After jira:**
 
 - The workflow is typically complete
-- Offer `/fix` if fix suggestions haven't been generated yet
 
 **Going back** — sometimes earlier work needs revision:
 
@@ -198,7 +185,7 @@ When the user invokes `/speedrun`:
 2. Launch **quality-review** and **code-check** as parallel sub-agents
 3. Once both complete, execute the **report** phase
 5. Present the final report to the user
-6. Offer `/fix` as a follow-up option
+6. Offer `/jira` as a follow-up option
 
 During speedrun, only pause if:
 
@@ -225,5 +212,4 @@ invoked without an existing inventory, run `/scan` first and inform the user.
 - **Recommendations come from this file, not from skills.** Skills report
   findings; this controller decides what to recommend next.
 - **Respect the target project.** This workflow reviews external project
-  documentation. Do not modify the target project's files unless the user
-  explicitly requests it via `/fix`.
+  documentation. Do not modify the target project's files.

@@ -69,5 +69,5 @@ phases were executed.]
 
 ## Next Steps
 
-- Run `/fix` to generate inline fix suggestions
+- Run `/jira` to create Jira issues for tracking remediation
 - Run `/code-check` for deeper code cross-referencing (if not already done)

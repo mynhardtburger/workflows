@@ -9,7 +9,6 @@ Systematic workflow for reviewing a project's documentation — assessing qualit
 - Classifies findings by severity for prioritized action
 - Cross-references documentation claims against source code using parallel discovery agents
 - Runs quality-review and code-check in parallel as sub-agents for speed
-- Generates inline fix suggestions grouped by file
 - Creates Jira epics with child bugs/tasks from the report via Jira REST API
 - Supports a speedrun mode for one-shot review
 
@@ -25,7 +24,6 @@ workflows/document-review/
 │   │   ├── quality-review.md      # Quality review
 │   │   ├── code-check.md         # Code cross-referencing
 │   │   ├── report.md             # Consolidated report
-│   │   ├── fix.md                # Fix suggestions
 │   │   ├── jira.md               # Jira issue creation
 │   │   └── speedrun.md           # Full pipeline
 │   └── skills/
@@ -35,14 +33,12 @@ workflows/document-review/
 │       ├── code-check/SKILL.md     # Source code verification
 │       ├── code-check/references/  # Discovery agent prompts
 │       ├── report/SKILL.md       # Report generation
-│       ├── fix/SKILL.md          # Fix suggestion generation
 │       └── jira/SKILL.md         # Jira issue creation
 ├── templates/                    # Output format templates
 │   ├── inventory.md
 │   ├── findings-quality-review.md
 │   ├── findings-code-check.md
-│   ├── report.md
-│   └── fixes.md
+│   └── report.md
 ├── CLAUDE.md                     # Behavioral context
 └── README.md                     # This file
 ```
@@ -55,15 +51,14 @@ workflows/document-review/
 | `/quality-review` | Deep quality review against 7 dimensions |
 | `/code-check` | Cross-reference docs against source code (optional) |
 | `/report` | Consolidate all findings into a deduplicated report |
-| `/fix` | Generate inline fix suggestions (optional) |
 | `/jira` | Create Jira epic with child bugs/tasks from the report (optional) |
 | `/speedrun` | Run scan → quality-review + code-check → report in one shot |
 
 ## Workflow Phases
 
 ```text
-scan ──┬──> quality-review (sub-agent) ──┬──> report ──> fix
-       └──> code-check (sub-agent)    ──┘            └──> jira
+scan ──┬──> quality-review (sub-agent) ──┬──> report
+       └──> code-check (sub-agent)    ──┘       └──> jira
 ```
 
 Quality review and code check are independent after scan — they run in parallel as sub-agents, each writing to its own findings file.
@@ -88,15 +83,11 @@ Runs a three-stage pipeline to systematically verify documentation against sourc
 
 Consolidates all findings from quality review and code check into a single deduplicated report. Findings are grouped by severity (Critical → Low) with a dimension × severity summary table. Reads from whichever findings files exist.
 
-### 5. Fix (Optional)
-
-Generates inline fix suggestions for each finding. Quotes problematic text, provides replacement, and explains rationale. Groups suggestions into pull request units with automatable classification and self-contained context for reliable text matching.
-
-### 6. Jira (Optional)
+### 5. Jira (Optional)
 
 Creates a Jira epic from the report with a child bug or task for each finding. Bugs are for findings that impact external users or customers. Tasks are for developer-facing or maintenance items. Uses the Jira REST API via `curl` (requires `JIRA_URL`, `JIRA_EMAIL`, and `JIRA_API_TOKEN` environment variables). Accepts project key, component, labels, fix version, and team as arguments or environment variables.
 
-### 7. Speedrun
+### 6. Speedrun
 
 Runs scan → quality-review + code-check (parallel) → report in one shot, pausing only for critical decisions.
 
@@ -131,7 +122,6 @@ Output files are written to `artifacts/`:
 | `artifacts/findings-quality-review.md` | Detailed findings by document |
 | `artifacts/findings-code-check.md` | Code verification findings |
 | `artifacts/report.md` | Consolidated findings report |
-| `artifacts/fixes.md` | Inline fix suggestions with PR grouping |
 
 ## Quick Start
 
@@ -140,5 +130,4 @@ Output files are written to `artifacts/`:
 3. Run `/quality-review` for quality analysis
 4. Optionally run `/code-check` to check docs against code
 5. Run `/report` to consolidate all findings
-6. Optionally run `/fix` for concrete fix suggestions
-7. Optionally run `/jira` to create Jira issues for tracking
+6. Optionally run `/jira` to create Jira issues for tracking

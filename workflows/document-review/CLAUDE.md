@@ -6,9 +6,8 @@ Systematic documentation review through these phases:
 2. **Quality Review** (`/quality-review`) — Deep quality analysis against 7 dimensions
 3. **Code Check** (`/code-check`) — *(Optional)* Cross-reference docs against source code
 4. **Report** (`/report`) — Consolidate all findings into a single deduplicated report
-5. **Fix** (`/fix`) — *(Optional)* Generate inline fix suggestions
-6. **Jira** (`/jira`) — *(Optional)* Create Jira epic with child bugs/tasks from the report
-7. **Speedrun** (`/speedrun`) — Run scan → quality-review + code-check → report in one shot
+5. **Jira** (`/jira`) — *(Optional)* Create Jira epic with child bugs/tasks from the report
+6. **Speedrun** (`/speedrun`) — Run scan → quality-review + code-check → report in one shot
 
 Quality review and code check are independent — they can run in parallel as sub-agents
 after scan completes. Each writes to its own findings file.
@@ -45,7 +44,7 @@ Output files are written to `artifacts/`.
 
 ## Hard Limits
 
-- Do not modify the project's documentation unless the user runs `/fix`
+- Do not modify the project's documentation — this workflow is read-only
 - Do not make assumptions about intended behavior — flag for verification
 - Read-only access to project code unless explicitly told otherwise
 - Never execute commands that could be destructive to the host system
