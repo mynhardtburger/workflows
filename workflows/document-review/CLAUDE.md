@@ -3,14 +3,14 @@
 Systematic documentation review through these phases:
 
 1. **Scan** (`/scan`) — Discover and catalog all documentation files
-2. **Review** (`/review`) — Deep quality analysis against 7 dimensions
-3. **Verify** (`/verify`) — *(Optional)* Cross-reference docs against source code
+2. **Quality Review** (`/quality-review`) — Deep quality analysis against 7 dimensions
+3. **Code Check** (`/code-check`) — *(Optional)* Cross-reference docs against source code
 4. **Report** (`/report`) — Consolidate all findings into a single deduplicated report
 5. **Fix** (`/fix`) — *(Optional)* Generate inline fix suggestions
 6. **Jira** (`/jira`) — *(Optional)* Create Jira epic with child bugs/tasks from the report
-7. **Speedrun** (`/speedrun`) — Run scan → review + verify → report in one shot
+7. **Speedrun** (`/speedrun`) — Run scan → quality-review + code-check → report in one shot
 
-Review and verify are independent — they can run in parallel as sub-agents
+Quality review and code check are independent — they can run in parallel as sub-agents
 after scan completes. Each writes to its own findings file.
 
 The workflow controller lives at `.claude/skills/controller/SKILL.md`.

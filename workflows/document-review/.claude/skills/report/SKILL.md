@@ -19,13 +19,13 @@ duplicates another.
 ## Critical Rules
 
 - **Findings must exist.** If neither
-  `artifacts/findings-review.md` nor
-  `artifacts/findings-verify.md` exists, inform the user and
-  recommend running `/review` first.
+  `artifacts/findings-quality-review.md` nor
+  `artifacts/findings-code-check.md` exists, inform the user and
+  recommend running `/quality-review` first.
 - **Include every finding.** This is not a summary — it is the consolidated
   record. Every finding from every phase must appear unless it is a duplicate.
-- **Deduplicate across phases.** The same issue may be reported by review
-  and verify. Merge these into a single finding, noting which phases detected
+- **Deduplicate across phases.** The same issue may be reported by
+  quality-review and code-check. Merge these into a single finding, noting which phases detected
   it in the **Source** field.
 - **Group by severity.** Findings are organized under `## Critical`,
   `## High`, `## Medium`, and `## Low` headings, in that order.
@@ -38,8 +38,8 @@ duplicates another.
 
 Read whichever findings files exist:
 
-- `artifacts/findings-review.md` (from `/review`)
-- `artifacts/findings-verify.md` (from `/verify`)
+- `artifacts/findings-quality-review.md` (from `/quality-review`)
+- `artifacts/findings-code-check.md` (from `/code-check`)
 
 Also read `artifacts/inventory.md` for context.
 
@@ -47,7 +47,7 @@ Also read `artifacts/inventory.md` for context.
 
 Collect every finding from all files into a single list. For each finding,
 record its severity, dimension, location, description, evidence, and which
-phase produced it (review, verify).
+phase produced it (quality-review, code-check).
 
 Identify duplicates — findings that describe the same issue in the same
 location. When two or more phases report the same issue:
@@ -73,7 +73,7 @@ For each dimension, assign a qualitative rating:
 
 Check whether optional phases were skipped and note the reason in the report:
 
-- If `artifacts/findings-verify.md` does not exist, note that code verification was not
+- If `artifacts/findings-code-check.md` does not exist, note that code verification was not
   performed.
 
 This helps readers understand the scope of the review.
@@ -87,7 +87,7 @@ Write every finding under its severity heading. Each finding must include:
 
 - **Dimension** — which quality dimension is affected
 - **File** — file path and line in backticks (e.g., `docs/guide.md:42`)
-- **Source** — which phase(s) detected it (review, verify)
+- **Source** — which phase(s) detected it (quality-review, code-check)
 - **Issue** — what the problem is
 - **Evidence** — quoted text, code snippet, or command output
 - **Fix** — the correction, if known with high confidence (omit if unsure)

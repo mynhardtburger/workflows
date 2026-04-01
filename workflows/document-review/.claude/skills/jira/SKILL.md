@@ -61,7 +61,7 @@ For each finding, capture:
 - **Title**: the heading text after the ID
 - **Dimension**: the quality dimension (Accuracy, Completeness, etc.)
 - **File**: the file path and line reference
-- **Source**: which phase detected it (review, verify)
+- **Source**: which phase detected it (quality-review, code-check)
 - **Issue**: description of what is wrong
 - **Evidence**: quoted text or output demonstrating the problem
 - **Fix**: the suggested correction (if present)

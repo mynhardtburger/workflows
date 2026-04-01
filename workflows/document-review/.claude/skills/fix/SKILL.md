@@ -20,9 +20,9 @@ needs-human-input so a PR agent knows how to handle it.
 ## Critical Rules
 
 - **Findings must exist.** If neither
-  `artifacts/findings-review.md` nor
-  `artifacts/findings-verify.md` exists, inform the user and
-  recommend running `/review` first.
+  `artifacts/findings-quality-review.md` nor
+  `artifacts/findings-code-check.md` exists, inform the user and
+  recommend running `/quality-review` first.
 - **Be specific.** Every suggestion must include the exact text to change and
   the exact replacement.
 - **Explain the rationale.** Don't just say "change X to Y" — explain why.
@@ -50,8 +50,8 @@ needs-human-input so a PR agent knows how to handle it.
 
 Read whichever findings files exist:
 
-- `artifacts/findings-review.md` (from `/review`)
-- `artifacts/findings-verify.md` (from `/verify`)
+- `artifacts/findings-quality-review.md` (from `/quality-review`)
+- `artifacts/findings-code-check.md` (from `/code-check`)
 
 Optionally read `artifacts/report.md` for priority guidance.
 

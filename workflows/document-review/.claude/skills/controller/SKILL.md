@@ -14,11 +14,11 @@ workflow by executing phases and handling transitions between them.
    Discover and catalog all documentation files in the target project. Produce
    an inventory of what exists, its format, and its apparent audience.
 
-2. **Review** (`/review`) — `.claude/skills/review/SKILL.md`
+2. **Quality Review** (`/quality-review`) — `.claude/skills/quality-review/SKILL.md`
    Deep-read each document, evaluating 7 quality dimensions. Classify findings
    by severity. Identify target audience per document.
 
-3. **Verify** (`/verify`) — `.claude/skills/verify/SKILL.md`
+3. **Code Check** (`/code-check`) — `.claude/skills/code-check/SKILL.md`
    Cross-reference documentation against actual source code. Check that
    documented APIs, CLI flags, config options, and behavior descriptions match
    the implementation.
@@ -35,7 +35,7 @@ workflow by executing phases and handling transitions between them.
    finding. Uses the Jira REST API via `curl`.
 
 7. **Speedrun** (`/speedrun`)
-   Run scan → review + verify (parallel) → report automatically, pausing
+   Run scan → quality-review + code-check (parallel) → report automatically, pausing
    only for critical decisions.
 
 Phases can be skipped or reordered at the user's discretion.
@@ -43,14 +43,14 @@ Phases can be skipped or reordered at the user's discretion.
 ## Dependency Graph
 
 ```text
-scan ──┬──> review (sub-agent) ──┬──> report ──> fix
-       └──> verify (sub-agent) ──┘            └──> jira
+scan ──┬──> quality-review (sub-agent) ──┬──> report ──> fix
+       └──> code-check (sub-agent)    ──┘            └──> jira
 ```
 
 - **Scan** must run first — all other phases depend on the inventory.
-- **Review** and **verify** are independent of each other. Both read the
-  inventory and write to separate findings files. They can run in parallel
-  as sub-agents.
+- **Quality review** and **code check** are independent of each other. Both
+  read the inventory and write to separate findings files. They can run in
+  parallel as sub-agents.
 - **Report** and **fix** read from whichever findings files exist.
 - **Jira** reads from `artifacts/report.md` and requires a completed report.
 
@@ -58,8 +58,8 @@ scan ──┬──> review (sub-agent) ──┬──> report ──> fix
 
 | Phase | Output |
 |-------|--------|
-| Review | `artifacts/findings-review.md` |
-| Verify | `artifacts/findings-verify.md` |
+| Quality Review | `artifacts/findings-quality-review.md` |
+| Code Check | `artifacts/findings-code-check.md` |
 
 Report and fix read from all findings files (whichever exist).
 
@@ -77,30 +77,32 @@ Report and fix read from all findings files (whichever exist).
 ## Handling Multiple Commands
 
 When the user provides multiple commands in a single prompt (e.g.,
-`/scan /review /report` or "run scan, review, and report"), execute **all**
+`/scan /quality-review /report` or "run scan, quality-review, and report"), execute **all**
 listed commands in order. This is equivalent to the user invoking each command
 one after another — do not stop between them to ask what to do next.
 
 ### How to process multiple commands
 
 1. **Parse** the full prompt and identify all commands mentioned
-2. **Announce** the plan: "Running /scan → /review → /report."
+2. **Announce** the plan: "Running /scan → /quality-review → /report."
 3. **Execute each command in sequence**, following the dependency graph:
-   - If a later command depends on an earlier one (e.g., `/review` needs
-     `/scan`), execute them in order
-   - If commands are independent (e.g., `/review` and `/verify`), run them in
+   - If a later command depends on an earlier one (e.g., `/quality-review`
+     needs `/scan`), execute them in order
+   - If commands are independent (e.g., `/quality-review` and `/code-check`),
+     run them in
      parallel as sub-agents — same as during speedrun
 4. **Report combined results** at the end, after all commands have completed
 5. **Then stop and wait** — recommend next steps as usual
 
 ### Examples
 
-- `/scan /review` → run scan, then review, then present results
-- `/scan /review /verify` → run scan, then review + verify in parallel, then
-  present results
-- `/scan /review /report` → run scan, then review, then report, then present
-  results
-- `/review /report /fix` → run review (scan first if no inventory), then
+- `/scan /quality-review` → run scan, then quality-review, then present results
+- `/scan /quality-review /code-check` → run scan, then quality-review +
+  code-check in parallel, then present results
+- `/scan /quality-review /report` → run scan, then quality-review, then report,
+  then present results
+- `/quality-review /report /fix` → run quality-review (scan first if no
+  inventory), then
   report, then fix, then present results
 
 ## Running Analysis Sub-Agents in Parallel
@@ -111,14 +113,14 @@ sub-agents:
 
 1. **Announce** which sub-agents you're launching in parallel
 2. **Spawn Agent calls simultaneously:**
-   - Agent (review): Read `.claude/skills/review/SKILL.md` and execute it.
-     Write output to `artifacts/findings-review.md`.
-   - Agent (verify): Read `.claude/skills/verify/SKILL.md` and execute it.
-     Write output to `artifacts/findings-verify.md`.
+   - Agent (quality-review): Read `.claude/skills/quality-review/SKILL.md` and
+     execute it. Write output to `artifacts/findings-quality-review.md`.
+   - Agent (code-check): Read `.claude/skills/code-check/SKILL.md` and execute
+     it. Write output to `artifacts/findings-code-check.md`.
 3. **Wait** for all agents to complete
 4. **Summarize** the combined results to the user
 
-When running a single phase (e.g., user invokes only `/review`), execute it
+When running a single phase (e.g., user invokes only `/quality-review`), execute it
 directly — no sub-agent needed.
 
 ## Recommending Next Steps
@@ -130,7 +132,7 @@ happened.
 ### Typical Flow
 
 ```text
-scan → review + verify (parallel) → report → (optional) fix
+scan → quality-review + code-check (parallel) → report → (optional) fix
 ```
 
 ### What to Recommend
@@ -140,17 +142,17 @@ make sense:
 
 **After scan:**
 
-- Recommend `/review` — the natural next step
-- Offer `/verify` if documentation references lots of code (APIs, CLI flags)
-- Mention that review and verify can run in parallel
+- Recommend `/quality-review` — the natural next step
+- Offer `/code-check` if documentation references lots of code (APIs, CLI flags)
+- Mention that quality-review and code-check can run in parallel
 - Offer `/speedrun` if the user wants to go fast
 
-**After review:**
+**After quality-review:**
 
 - Recommend `/report` to consolidate all findings
-- Offer `/verify` for deeper accuracy checking against code
+- Offer `/code-check` for deeper accuracy checking against code
 
-**After verify:**
+**After code-check:**
 
 - Recommend `/report` to consolidate all findings
 
@@ -174,18 +176,18 @@ make sense:
 **Going back** — sometimes earlier work needs revision:
 
 - New documents discovered → offer `/scan` again
-- Need deeper accuracy checking → offer `/verify`
+- Need deeper accuracy checking → offer `/code-check`
 
 ### How to Present Options
 
 Lead with your top recommendation, then list alternatives briefly:
 
 ```text
-Recommended next step: /review — deep quality analysis of the 42 documents found.
+Recommended next step: /quality-review — deep quality analysis of the 42 documents found.
 
 Other options:
-- /verify — cross-reference docs against source code (can run in parallel with review)
-- /speedrun — run scan → review + verify → report automatically
+- /code-check — cross-reference docs against source code (can run in parallel with quality-review)
+- /speedrun — run scan → quality-review + code-check → report automatically
 ```
 
 ## Executing a Speedrun
@@ -193,7 +195,7 @@ Other options:
 When the user invokes `/speedrun`:
 
 1. Execute the **scan** phase — announce it, read the skill, run it
-2. Launch **review** and **verify** as parallel sub-agents
+2. Launch **quality-review** and **code-check** as parallel sub-agents
 3. Once both complete, execute the **report** phase
 5. Present the final report to the user
 6. Offer `/fix` as a follow-up option
@@ -211,7 +213,7 @@ When the user first provides a project path, repository URL, or description:
 1. Execute the **scan** phase
 2. After scanning, present results and wait
 
-If the user invokes a specific command (e.g., `/review`), execute that phase
+If the user invokes a specific command (e.g., `/quality-review`), execute that phase
 directly — don't force them through earlier phases. However, if a phase is
 invoked without an existing inventory, run `/scan` first and inform the user.
 

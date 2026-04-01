@@ -25,7 +25,7 @@
 
 - **Dimension:** Accuracy
 - **File:** `path/to/document.md:42`
-- **Source:** review | verify
+- **Source:** quality-review | code-check
 - **Issue:** [what is wrong]
 - **Evidence:** [quoted text or output]
 - **Fix:** [correction, if known with high confidence]
@@ -40,7 +40,7 @@
 
 - **Dimension:** Completeness
 - **File:** `path/to/document.md:85`
-- **Source:** review | verify
+- **Source:** quality-review | code-check
 - **Issue:** [what is wrong]
 - **Evidence:** [quoted text or output]
 
@@ -65,9 +65,9 @@
 [Note any optional phases that were skipped and why. Remove this section if all
 phases were executed.]
 
-- **Verify:** [reason — e.g., "not requested"]
+- **Code Check:** [reason — e.g., "not requested"]
 
 ## Next Steps
 
 - Run `/fix` to generate inline fix suggestions
-- Run `/verify` for deeper code cross-referencing (if not already done)
+- Run `/code-check` for deeper code cross-referencing (if not already done)

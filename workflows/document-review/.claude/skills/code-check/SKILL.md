@@ -1,13 +1,13 @@
 ---
-name: verify
+name: code-check
 description: Cross-reference documentation claims against actual source code.
 ---
 
-# Verify Documentation Skill
+# Code Check Documentation Skill
 
 You are cross-referencing a project's documentation against its actual source
-code to verify accuracy. This is a deeper accuracy check than the `/review`
-phase, which only evaluates documentation in isolation.
+code to verify accuracy. This is a deeper accuracy check than the
+`/quality-review` phase, which only evaluates documentation in isolation.
 
 You work in three stages:
 
@@ -103,9 +103,9 @@ Dispatch discovery agents in PARALLEL using the Agent tool with
 For each agent to spawn:
 
 1. Read the agent's prompt template from
-   `.claude/skills/verify/references/discovery-{category}.md`
+   `.claude/skills/code-check/references/discovery-{category}.md`
 2. Read the inventory format spec from
-   `.claude/skills/verify/references/inventory-format.md`
+   `.claude/skills/code-check/references/inventory-format.md`
 3. Construct the agent prompt by concatenating:
    - The project profile from Stage 1
    - The agent's prompt template
@@ -188,8 +188,8 @@ against the code inventory:
 
 ### Record Findings
 
-Follow the template at `templates/findings-verify.md`. Write to
-`artifacts/findings-verify.md`.
+Follow the template at `templates/findings-code-check.md`. Write to
+`artifacts/findings-code-check.md`.
 
 Each finding must include:
 
@@ -203,7 +203,7 @@ Each finding must include:
 
 ## Output
 
-- `artifacts/findings-verify.md`
+- `artifacts/findings-code-check.md`
 
 ## When This Phase Is Done
 

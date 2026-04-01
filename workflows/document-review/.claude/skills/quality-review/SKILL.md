@@ -1,9 +1,9 @@
 ---
-name: review
+name: quality-review
 description: Deep quality review of the entire documentation corpus.
 ---
 
-# Review Documentation Skill
+# Quality Review Documentation Skill
 
 You are performing a deep quality review of a project's documentation corpus.
 Your job is to evaluate each document against 7 quality dimensions and produce
@@ -13,7 +13,7 @@ a structured findings report.
 
 Read every document in the inventory, evaluate its quality, identify issues,
 and classify findings by severity and dimension. This is a docs-only review —
-you are not cross-referencing against source code (that's `/verify`).
+you are not cross-referencing against source code (that's `/code-check`).
 
 ## Critical Rules
 
@@ -49,9 +49,9 @@ Evaluate each document against these 7 dimensions:
      are real values a user should copy verbatim
    - Statements that contradict what the reader would actually experience
    Flag claims that seem suspect based on what you can determine from the
-   documentation alone. Note that `/verify` does deeper code
+   documentation alone. Note that `/code-check` does deeper code
    cross-referencing, but obvious factual errors belong here — don't defer
-   everything to verify.
+   everything to code-check.
 
 2. **Completeness** — Does the document cover its topic fully? Are there
    obvious omissions? Are prerequisites listed? Are edge cases mentioned?
@@ -212,8 +212,8 @@ exist and how they're organized. Build a list of all document paths to review.
 
 ### Step 2: Initialize the Findings File
 
-Write the file header to `artifacts/findings-review.md` using
-the template at `templates/findings-review.md`. Fill in the date, repository, commit SHA,
+Write the file header to `artifacts/findings-quality-review.md` using
+the template at `templates/findings-quality-review.md`. Fill in the date, repository, commit SHA,
 and instruction. Leave the summary table counts as `N` — you will update them
 at the end.
 
@@ -250,7 +250,7 @@ document:
    - **Evidence**: Quote the problematic text
    - **Fix**: The correction, if known with high confidence (omit if unsure)
    - **Audience impact**: How this affects the target audience
-8. **Append** the document's section to `artifacts/findings-review.md`
+8. **Append** the document's section to `artifacts/findings-quality-review.md`
    immediately — including the document heading, audience assessment, and all
    findings (or an explicit note that no issues were found). Do not hold
    findings in memory across documents.
@@ -275,10 +275,10 @@ Append the `## Cross-Document Issues` section to the findings file.
 
 Read the findings file you have built. Count findings for each
 dimension × severity cell. Update the summary table at the top of
-`artifacts/findings-review.md` with the actual counts,
+`artifacts/findings-quality-review.md` with the actual counts,
 replacing the placeholder `N` values. Include row totals (per dimension) and
 column totals (per severity).
 
 ## Output
 
-- `artifacts/findings-review.md`
+- `artifacts/findings-quality-review.md`
