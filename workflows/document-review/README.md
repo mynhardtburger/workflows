@@ -47,7 +47,7 @@ Only required if using `/jira`:
 | `JIRA_TEAM` | No | `team=<name>` | Default team name |
 | `JIRA_INITIAL_STATUS` | No | `status=<name>` | Workflow transition after creation (e.g., `Backlog`) |
 
-> **Warning:** `/jira` uses `curl` to call the Jira REST API directly because the Atlassian MCP does not support creating epics or issues. Your `JIRA_API_TOKEN` will be visible in the session history.
+> **Warning:** `/jira` uses `curl` to call the Jira REST API directly because the Atlassian MCP does not support creating epics or issues. Credentials are piped via stdin (`curl --config -`) to avoid exposure in process listings, but your `JIRA_API_TOKEN` will still be visible in the session history.
 
 ## Directory Structure
 

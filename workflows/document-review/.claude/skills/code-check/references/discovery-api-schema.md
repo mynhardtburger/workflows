@@ -33,6 +33,21 @@ request/response schemas, and authentication requirements in this project.
 - NestJS decorators: `@Get(`, `@Post(`, `@Controller(`
 - tRPC router definitions
 
+**Java:**
+
+- Spring MVC/WebFlux: `@GetMapping(`, `@PostMapping(`, `@PutMapping(`,
+  `@DeleteMapping(`, `@RequestMapping(`
+- `@RestController`, `@Controller` — controller class annotations
+- JAX-RS: `@GET`, `@POST`, `@PUT`, `@DELETE`, `@Path(`
+- Quarkus RESTEasy: same JAX-RS annotations
+
+**Ruby:**
+
+- Rails routes: `get '`, `post '`, `resources :`, `namespace :` in
+  `config/routes.rb`
+- Sinatra: `get '/'`, `post '/'` route definitions
+- Grape API: `resource :`, `get`, `post` in API classes
+
 **Protobuf/gRPC:**
 
 - `.proto` files — service definitions, message types, RPC methods

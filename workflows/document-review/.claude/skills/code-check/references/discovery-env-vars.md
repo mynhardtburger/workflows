@@ -30,6 +30,19 @@ project profile):
 - `process.env[` — bracket access
 - `dotenv` config loading
 
+**Java:**
+
+- `System.getenv("` — direct env var reads
+- `System.getenv().get("` — map-style access
+- `@Value("${` — Spring property/env injection
+- `environment.getProperty("` — Spring Environment access
+
+**Ruby:**
+
+- `ENV['` or `ENV["` — direct access
+- `ENV.fetch('` — access with required/default
+- `ENV.key?('` — existence check
+
 **Dockerfiles:**
 
 - `ENV` directives

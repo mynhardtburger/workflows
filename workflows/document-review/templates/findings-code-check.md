@@ -13,10 +13,17 @@
 | Result | Count |
 |--------|-------|
 | Match | N |
-| Mismatch (Critical) | N |
-| Partial (Low) | N |
-| Undocumented (High) | N |
-| Stale (High) | N |
+| Mismatch | N |
+| Partial | N |
+| Undocumented | N |
+| Stale | N |
+
+| Severity | Count |
+|----------|-------|
+| Critical | N |
+| High | N |
+| Medium | N |
+| Low | N |
 
 ## Findings by Document
 
@@ -24,6 +31,7 @@
 
 #### Verification Finding 1
 
+- **Severity:** Critical
 - **Dimension:** Accuracy
 - **Doc location:** README.md, "Configuration" section, line 85
 - **Code location:** src/config.py:42
@@ -41,6 +49,7 @@
 
 ### Feature 1
 
+- **Severity:** High
 - **Dimension:** Completeness
 - **Code location:** src/cli.py:120
 - **Issue:** The `--dry-run` flag exists in code but is not documented
@@ -54,6 +63,7 @@
 
 ### Stale 1
 
+- **Severity:** High
 - **Dimension:** Accuracy
 - **Doc location:** docs/guide.md:45
 - **Issue:** References `--legacy-mode` flag which no longer exists in code

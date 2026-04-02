@@ -28,6 +28,7 @@
 
 #### Finding 1
 
+- **Severity:** Critical
 - **Dimension:** Accuracy
 - **File:** `path/to/document.md:42`
 - **Issue:** The documented command uses a flag that doesn't exist.

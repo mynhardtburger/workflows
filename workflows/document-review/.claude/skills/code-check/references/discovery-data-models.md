@@ -26,6 +26,10 @@ data definitions.
 - Go: GORM model structs with `gorm:` tags
 - Python: SQLAlchemy models, Django models (`models.Model`)
 - Node.js: Sequelize, TypeORM, Prisma schema (`schema.prisma`)
+- Java: JPA entities (`@Entity`, `@Table`), Hibernate mappings,
+  Spring Data repositories (`extends JpaRepository`)
+- Ruby: ActiveRecord models (`< ApplicationRecord` or `< ActiveRecord::Base`),
+  associations (`belongs_to`, `has_many`, `has_one`), validations
 
 **GraphQL:**
 

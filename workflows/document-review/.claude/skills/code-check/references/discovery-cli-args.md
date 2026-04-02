@@ -34,6 +34,19 @@ flags, and subcommands that this project defines.
 - `#[derive(Parser)]` — derive-based Clap
 - `structopt` — StructOpt definitions
 
+**Java:**
+
+- `@Command`, `@Option`, `@Parameters` — Picocli annotations
+- `Options`, `Option.builder(` — Apache Commons CLI
+- Spring Boot `ApplicationRunner`, `CommandLineRunner` — check `run(` args
+- `args` parameter in `public static void main(String[] args)` — raw access
+
+**Ruby:**
+
+- `OptionParser.new` — stdlib option parsing
+- `Thor` subclass definitions — Thor CLI framework
+- `ARGV` — raw argument access
+
 **Shell scripts:**
 
 - `getopts` — option parsing

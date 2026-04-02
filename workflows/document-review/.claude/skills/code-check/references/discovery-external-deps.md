@@ -12,12 +12,18 @@ systems that this project connects to at runtime.
 - Database driver imports: `database/sql`, `pgx`, `sqlalchemy`, `mongoose`,
   `prisma`
 - Connection setup code: `sql.Open(`, `pgxpool.Connect(`, `create_engine(`
+- Java: `DriverManager.getConnection(`, `DataSource`, Spring
+  `spring.datasource.` properties
+- Ruby: `database.yml` config, `ActiveRecord::Base.establish_connection`
 
 **HTTP clients:**
 
 - `http.Client`, `http.Get(`, `http.Post(` (Go)
 - `requests.get(`, `httpx.` (Python)
 - `fetch(`, `axios.` (Node.js)
+- `OkHttpClient`, `HttpClient.newHttpClient(`, `RestTemplate`,
+  `WebClient.create(` (Java)
+- `Faraday.new(`, `HTTParty.`, `Net::HTTP.` (Ruby)
 - Look at what URLs/hosts they connect to
 
 **Message queues:**

@@ -87,9 +87,21 @@ For each finding, capture:
 
 ### Step 3: Create the Epic
 
-Use the Jira REST API via `curl` to create an Epic. All API calls use basic
-authentication with `$JIRA_EMAIL:$JIRA_API_TOKEN` and target
+Use the Jira REST API via `curl` to create an Epic. All API calls target
 `$JIRA_URL/rest/api/2/issue`.
+
+**Authentication:** Pipe credentials via stdin using `curl --config -` so they
+do not appear as command-line arguments (which would be visible in `ps` output).
+Use this pattern for every `curl` call:
+
+```bash
+printf 'user = "%s:%s"\n' "$JIRA_EMAIL" "$JIRA_API_TOKEN" | \
+  curl --config - \
+    -X POST \
+    -H "Content-Type: application/json" \
+    -d '...' \
+    "$JIRA_URL/rest/api/2/issue"
+```
 
 #### Convert Markdown to Jira wiki markup
 
@@ -120,11 +132,12 @@ Record the created epic key (e.g., `PROJ-123`).
 After creating the epic, attach `artifacts/report.md` to it using:
 
 ```bash
-curl -u "$JIRA_EMAIL:$JIRA_API_TOKEN" \
-  -X POST \
-  -H "X-Atlassian-Token: no-check" \
-  -F "file=@artifacts/report.md" \
-  "$JIRA_URL/rest/api/2/issue/<epic-key>/attachments"
+printf 'user = "%s:%s"\n' "$JIRA_EMAIL" "$JIRA_API_TOKEN" | \
+  curl --config - \
+    -X POST \
+    -H "X-Atlassian-Token: no-check" \
+    -F "file=@artifacts/report.md" \
+    "$JIRA_URL/rest/api/2/issue/<epic-key>/attachments"
 ```
 
 This keeps the full report accessible from the epic without cluttering the
@@ -159,7 +172,8 @@ Decide per-finding based on the issue content:
 
 #### Build the Issue
 
-Use the Jira REST API via `curl` (same auth as Step 3) for each finding:
+Use the Jira REST API via `curl` (same `--config -` auth pattern as Step 3)
+for each finding:
 
 - **Project**: the resolved project key
 - **Issue type**: `Bug` or `Task` (per classification above)

@@ -29,6 +29,21 @@ config fields, and config-loading mechanisms in this project.
 - `dotenv` + manual parsing
 - `zod` or `joi` schemas for config validation
 
+**Java:**
+
+- `@ConfigurationProperties` — Spring Boot config binding classes
+- `application.properties`, `application.yml` — Spring config files
+- `@Value("${` — individual property injection
+- Quarkus `application.properties` with `quarkus.` prefixes
+- MicroProfile Config `@ConfigProperty`
+
+**Ruby:**
+
+- `config/` directory files in Rails (`database.yml`, `application.rb`)
+- `Rails.application.config.` — Rails config access
+- `YAML.load_file(` / `YAML.safe_load(` — YAML config loading
+- `Figaro`, `dotenv-rails` — config management gems
+
 **General:**
 
 - Files named `config.yaml`, `config.json`, `config.toml`, `*.config.js`,

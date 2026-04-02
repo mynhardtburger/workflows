@@ -58,6 +58,9 @@ For detected languages, check framework markers:
 - Python: `pyproject.toml`/`requirements.txt` for `fastapi`, `flask`,
   `django`, `click`
 - Node.js: `package.json` for `express`, `next`, `nestjs`, `commander`
+- Java: `pom.xml`/`build.gradle` for `spring-boot`, `spring-web`, `quarkus`,
+  `micronaut`, `picocli`, `javax.ws.rs` (JAX-RS)
+- Ruby: `Gemfile` for `rails`, `sinatra`, `grape`, `thor`
 
 ### Step 1.2: Component Detection
 
@@ -181,10 +184,13 @@ against the code inventory:
    Grep/Glob before flagging as stale
 5. Record each result:
    - **Match**: Doc accurately reflects code — no finding needed
-   - **Mismatch**: Doc contradicts code — **Critical**
-   - **Partial**: Doc is incomplete or imprecise — **Low**
-   - **Undocumented**: Code feature not in docs — **High**
-   - **Stale**: Doc references removed functionality — **High**
+   - **Mismatch**: Doc contradicts code — typically Critical, but use judgment
+   - **Partial**: Doc is incomplete or imprecise — typically Low, but Medium
+     or higher if the gap affects a user-facing API or procedure
+   - **Undocumented**: Code feature not in docs — typically High, but Medium
+     for internal-only features or Low for minor config options
+   - **Stale**: Doc references removed functionality — typically High, but
+     Critical if users would follow broken instructions
 
 ### Record Findings
 
@@ -193,6 +199,8 @@ Follow the template at `templates/findings-code-check.md`. Write to
 
 Each finding must include:
 
+- **Severity**: Critical, High, Medium, or Low (use the guidance in the
+  verification process above, but assess each finding individually)
 - **Dimension**: Accuracy or Completeness
 - **File**: Doc file path and line (e.g., `README.md:85`)
 - **Code location**: Source file and line

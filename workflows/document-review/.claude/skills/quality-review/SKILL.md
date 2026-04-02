@@ -244,6 +244,7 @@ document:
      consistency, abstraction level, "why" context, onward paths).
    - For mixed docs, apply both sets of checks to the relevant sections.
 7. **Record** findings with:
+   - **Severity**: Critical, High, Medium, or Low
    - **Dimension**: Which quality dimension is affected
    - **File**: File path and line in backticks (e.g., `docs/guide.md:42`)
    - **Issue**: What the problem is

@@ -25,6 +25,18 @@ data files).
 - `fs.writeFile`, `fs.createWriteStream`
 - `fs.readFile`, `fs.createReadStream`
 
+**Java:**
+
+- `Files.write(`, `Files.newBufferedWriter(` — NIO file writing
+- `FileOutputStream`, `BufferedWriter` — classic I/O
+- `Files.readAllLines(`, `Files.newBufferedReader(` — NIO file reading
+
+**Ruby:**
+
+- `File.write(`, `File.open(` with write modes
+- `IO.write(`, `IO.read(`
+- `FileUtils.cp`, `FileUtils.mv`
+
 **General:**
 
 - Output directory configuration (CLI flags or env vars pointing to output
